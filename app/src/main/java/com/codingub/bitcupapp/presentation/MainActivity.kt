@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-            //   createBottomBar()
+        createBottomBar()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -64,23 +64,17 @@ class MainActivity : AppCompatActivity() {
         UI
      */
 
-//    private fun createBottomBar(){
-//        binding.navbar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
-//            override fun onTabSelected(
-//                lastIndex: Int,
-//                lastTab: AnimatedBottomBar.Tab?,
-//                newIndex: Int,
-//                newTab: AnimatedBottomBar.Tab
-//            ) {
-//
-//                when(newIndex){
-//                    0->pushFragment(HomeFragment(),"home")
-//                    1->pushFragment(HomeFragment(),"bookmark")
-//                    else->{}
-//                }
-//            }
-//        })
-//    }
+    private fun createBottomBar(){
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+
+                R.id.home_tab -> pushFragment(HomeFragment(), "home")
+                R.id.bookmark_tab -> pushFragment(HomeFragment(), "bookmark")
+                else ->{}
+            }
+            true
+        }
+    }
 
     /*
         Navigation
@@ -104,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun back() {
         onBackPressedDispatcher.addCallback(this) {
-            if (supportFragmentManager.backStackEntryCount < 0) {
+            if (supportFragmentManager.backStackEntryCount == 0) {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - mBackPressedTime > TIME_INTERVAL) {
                     Toast.makeText(this@MainActivity, R.string.exit_app_string, Toast.LENGTH_SHORT)
@@ -113,10 +107,11 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     finish()
                 }
+                return@addCallback
             }
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_in)
+            transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_back)
             val currentFragment =
                 supportFragmentManager.findFragmentById(R.id.fragment_container_view)
             currentFragment?.view?.startAnimation(

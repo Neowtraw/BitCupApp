@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.FeaturedType
 import com.codingub.bitcupapp.utils.DrawableUtil
+import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.Resource
 import com.codingub.bitcupapp.utils.extension.asFloat
 import com.codingub.bitcupapp.utils.extension.dp
@@ -40,7 +41,7 @@ class FeaturedView(
 
     init {
         setPadding(20.dp, 10.dp, 20.dp, 10.dp)
-        // typeface = Font.REGULAR
+        typeface = Font.REGULAR
         isSingleLine = true
         ellipsize = TextUtils.TruncateAt.END
         gravity = Gravity.CENTER

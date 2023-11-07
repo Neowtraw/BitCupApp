@@ -16,5 +16,7 @@ object AssetUtil {
 
     private object FileExtension{
         const val PNG: String = "png"
+        const val JPG: String = "jpg"
+        const val JPEG: String = "jpeg"
     }
 }

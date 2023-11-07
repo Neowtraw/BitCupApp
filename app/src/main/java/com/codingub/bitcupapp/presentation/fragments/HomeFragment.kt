@@ -2,6 +2,7 @@ package com.codingub.bitcupapp.presentation.fragments
 
 
 import android.graphics.Outline
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +11,15 @@ import android.view.ViewOutlineProvider
 import android.widget.LinearLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.FeaturedType
 import com.codingub.bitcupapp.databinding.FragmentHomeBinding
+import com.codingub.bitcupapp.presentation.adapters.CuratedPhotoAdapter
 import com.codingub.bitcupapp.presentation.custom.FeaturedView
 import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.AssetUtil
+import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ImageUtil
 import com.codingub.bitcupapp.utils.Resource
 import com.codingub.bitcupapp.utils.extension.dp
@@ -29,8 +33,9 @@ class HomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
 
-    private lateinit var achieveView: RecyclerView
     private lateinit var categoriesLayout: TabLayout
+    private lateinit var photoContainerView: RecyclerView
+    private lateinit var photoAdapter: CuratedPhotoAdapter
 
     override fun createView(inf: LayoutInflater, con: ViewGroup?, state: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inf, con, false)
@@ -38,6 +43,7 @@ class HomeFragment : BaseFragment() {
         //ui
         customizeSearch()
         createTabLayout()
+        createPhotoView()
 
         observeChanges()
         return binding.root
@@ -46,6 +52,7 @@ class HomeFragment : BaseFragment() {
     private fun customizeSearch() {
         binding.Search.apply {
             post {
+                binding.tvSearch.typeface = Font.LIGHT
                 ImageUtil.load(AssetUtil.imagesImageUri("search")) {
                     binding.imgSearch.apply {
                         setImageDrawable(it)
@@ -107,5 +114,47 @@ class HomeFragment : BaseFragment() {
         )
     }
 
+    private fun createPhotoView() {
+        photoContainerView = RecyclerView(requireContext()).apply {
+            setHasFixedSize(true)
+            layoutManager = StaggeredGridLayoutManager(
+                2,
+                StaggeredGridLayoutManager.VERTICAL
+            )
+            photoAdapter = CuratedPhotoAdapter() {
+                //pushFragment(DetailsFragment,"details")
+            }
+            adapter = photoAdapter
+            addItemDecoration(createItemDecoration())
+        }
+        binding.root.addView(
+            photoContainerView, LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+    }
 
+    private fun createItemDecoration(): RecyclerView.ItemDecoration {
+        return object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                val spacing = 8.dp
+                outRect.apply {
+                    left = spacing
+                    top = spacing
+                    right = spacing
+                    bottom = spacing
+                }
+            }
+        }
+    }
+
+    override fun observeChanges() {
+
+    }
 }
