@@ -11,6 +11,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentTransaction
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.databinding.ActivityMainBinding
+import com.codingub.bitcupapp.presentation.fragments.HomeFragment
 import com.codingub.bitcupapp.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -49,12 +50,12 @@ class MainActivity : AppCompatActivity() {
 
             //   createBottomBar()
 
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .setReorderingAllowed(true)
-//                .add(R.id.fragment_container_view, HomeFragment())
-//                .commit()
-//        }
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fragment_container_view, HomeFragment())
+                .commit()
+        }
 
         back()
     }

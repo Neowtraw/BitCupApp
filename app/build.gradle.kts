@@ -73,6 +73,7 @@ dependencies {
 
     hilt()
     base()
+    gson()
     glide()
     coroutines()
     viewModel()
