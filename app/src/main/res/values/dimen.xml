@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <dimen name="main_padding">24dp</dimen>
+    <dimen name="main_internal_padding">24dp</dimen>
+    <dimen name="search_round">50dp</dimen>
+    <dimen name="search_padding">18dp</dimen>
+    <dimen name="search_image_size">16dp</dimen>
+
+    <!-- tabs -->
+    <dimen name="tab_width_padding">20dp</dimen>
+    <dimen name="tab_height_padding">10dp</dimen>
+
+    <!-- text -->
+    <dimen name="main_text">14sp</dimen>
+
+
+</resources>

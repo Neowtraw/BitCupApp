@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "405446617589",
+    "project_id": "bitcupapp",
+    "storage_bucket": "bitcupapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405446617589:android:fff379894e5ce24ad958bc",
+        "android_client_info": {
+          "package_name": "com.codingub.bitcupapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFtw6hRgZJyDCpYfzhskcnCu7Tv948Yuw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

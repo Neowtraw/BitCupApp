@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">BitCupApp</string>
+    <string name="exit_app_string">Нажмите еще раз, чтобы выйти</string>
+
+    <!-- navigation -->
+    <string name="home">home</string>
+    <string name="bookmark">bookmark</string>
+
+
+    <!-- Main Fragment -->
+    <string name="search">Search</string>
+
+
+</resources>
