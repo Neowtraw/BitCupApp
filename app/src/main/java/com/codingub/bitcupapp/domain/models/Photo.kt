@@ -8,4 +8,5 @@ data class Photo(
     val height: Long,
     val src: SrcType,
     val photographer: String,
+    val favorite: Boolean = false
 )

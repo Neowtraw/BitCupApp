@@ -1,16 +1,14 @@
 package com.codingub.bitcupapp.data.local.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.Embedded
+import androidx.room.Relation
 
-@Entity(tableName = "FeaturedCollection")
 data class FeaturedCollectionEntity(
-    @PrimaryKey
-    val id: String,
-    val title: String,
-    val description: String?,
-    val collectionPrivate: Boolean,
-    val mediaCount: Int,
-    val photosCount: Int,
-    val videoCount: Int
+    @Embedded val featureCollection: FeaturedCollectionRef,
+    @Relation(
+        parentColumn = "title",
+        entityColumn = "id",
+        entity = CuratedPhotoEntity::class
+    )
+    val photos: List<CuratedPhotoEntity>
 )

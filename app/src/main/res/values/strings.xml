@@ -9,6 +9,7 @@
 
     <!-- Main Fragment -->
     <string name="search">Search</string>
+    <string name="download">Download\n</string>
 
 
 </resources>

@@ -2,6 +2,7 @@ package com.codingub.bitcupapp.data.mappers
 
 import com.codingub.bitcupapp.data.local.models.CuratedPhotoEntity
 import com.codingub.bitcupapp.data.local.models.FeaturedCollectionEntity
+import com.codingub.bitcupapp.data.local.models.FeaturedCollectionRef
 import com.codingub.bitcupapp.data.remote.models.CuratedPhotoDto
 import com.codingub.bitcupapp.data.remote.models.FeaturedCollectionDto
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
@@ -20,8 +21,11 @@ fun CuratedPhotoEntity.toPhoto() = Photo(
 )
 
 fun FeaturedCollectionEntity.toFeatureCollection() = FeaturedCollection(
-    id = this.id,
-    title = this.title
+    id = this.featureCollection.id,
+    title = this.featureCollection.title,
+    curatedPhotos = this.photos.map {
+        it.toPhoto()
+    }
 )
 
 /**

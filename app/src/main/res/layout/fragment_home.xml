@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/main_internal_padding"
-        android:background="@drawable/item_search_background"
+        android:background="@drawable/item_btn_round_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/search_padding">

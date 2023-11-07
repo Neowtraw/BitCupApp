@@ -6,16 +6,19 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <!-- тест heigh-->
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:cardCornerRadius="@dimen/image_corner">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgPhoto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/app_icon" />
 
     </androidx.cardview.widget.CardView>
 
