@@ -37,7 +37,6 @@ object Dependencies {
 
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
     const val fragment = "androidx.fragment:fragment-ktx:${Versions.fragments}"
-    const val shimmerEffect = "com.facebook.shimmer:shimmer:${Versions.shimmerEffect}"
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
 }
 
@@ -84,10 +83,6 @@ fun DependencyHandler.base() {
 
 fun DependencyHandler.gson(){
     implementation(Dependencies.gson)
-}
-
-fun DependencyHandler.shimmerEffect(){
-    implementation(Dependencies.shimmerEffect)
 }
 
 fun DependencyHandler.glide(){

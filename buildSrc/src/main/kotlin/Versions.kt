@@ -23,6 +23,5 @@ object Versions {
     const val recyclerView = "1.3.1"
     const val fragments = "1.6.1"
 
-    const val shimmerEffect = "0.5.0"
     const val gson = "2.10.1"
 }
