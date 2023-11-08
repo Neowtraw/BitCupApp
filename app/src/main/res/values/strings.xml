@@ -2,14 +2,17 @@
     <string name="app_name">BitCupApp</string>
     <string name="exit_app_string">Нажмите еще раз, чтобы выйти</string>
 
-    <!-- navigation -->
     <string name="home">home</string>
     <string name="bookmark">bookmark</string>
-
-
-    <!-- Main Fragment -->
     <string name="search">Search</string>
-    <string name="download">Download\n</string>
+
+    <string name="download">Download</string>
+    <string name="image_downloaded">Изображение успешно установлено!</string>
+
+    <string name="try_again">Try Again</string>
+    <string name="explore">Explore</string>
+    <string name="no_results_found">No results found</string>
+    <string name="bookmarks">Bookmarks</string>
 
 
 </resources>

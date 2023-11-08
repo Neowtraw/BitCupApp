@@ -9,5 +9,5 @@ interface RemoteDataSource {
     suspend fun getCuratedPhotos() : List<Photo>
     suspend fun getFeaturedCollections() : List<FeaturedCollection>
     suspend fun searchPhotos(query: String) : List<Photo>
- //   suspend fun getPhoto(id: Long) : Photo
+    suspend fun getPhoto(id: Long) : Photo
 }

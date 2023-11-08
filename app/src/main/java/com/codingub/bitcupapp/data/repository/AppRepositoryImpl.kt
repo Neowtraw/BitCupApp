@@ -20,7 +20,6 @@ import com.codingub.bitcupapp.utils.extension.isEmptyOrNull
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import retrofit2.HttpException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -87,8 +86,15 @@ class AppRepositoryImpl @Inject constructor(
         return localDataSource.deleteBookmarkPhoto(photoId)
     }
 
-    override fun getPhoto(id: Long): Flow<Photo> {
-        return localDataSource.getPhoto(id)
+    override suspend fun getPhoto(id: Long): ResultState<Photo> {
+        return try {
+            val data = remoteDataSource.getPhoto(id)
+            ResultState.Success(data)
+        } catch (e: Exception) {
+            Log.e("getPhoto", e.message.toString())
+            ResultState.Error(e)
+        }
+
     }
 
     override fun getBookmarkPhotos(id: Long): Flow<List<Photo>> {
@@ -107,7 +113,8 @@ class AppRepositoryImpl @Inject constructor(
 
     override fun initCacheUpdater() {
         val updateWorkRequest = PeriodicWorkRequestBuilder<CacheUpdateWorker>(
-            Constants.UPDATE_INTERVAL, TimeUnit.MINUTES)
+            Constants.UPDATE_INTERVAL, TimeUnit.MINUTES
+        )
             .setConstraints(workConstraints)
             .addTag(WorkerConstants.WORKER_TAG)
             .build()
@@ -120,10 +127,10 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateCachedFeaturedCollections() {
-        try{
+        try {
             val collections = remoteDataSource.getFeaturedCollections()
             localDataSource.insertFeaturedCollections(collections)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.e("updateCachedCollections", e.message.toString())
             throw e
         }
@@ -136,5 +143,6 @@ class AppRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Log.e("updateCachedCollections", e.message.toString())
             throw e
-        }    }
+        }
+    }
 }

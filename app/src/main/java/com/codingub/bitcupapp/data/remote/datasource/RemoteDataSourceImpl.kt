@@ -1,9 +1,11 @@
 package com.codingub.bitcupapp.data.remote.datasource
 
+import android.util.Log
 import com.codingub.bitcupapp.data.mappers.toFeatureCollection
 import com.codingub.bitcupapp.data.mappers.toPhoto
 import com.codingub.bitcupapp.data.prefs.AuthConfig
 import com.codingub.bitcupapp.data.remote.AppApi
+import com.codingub.bitcupapp.data.utils.SrcType
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.domain.models.Photo
 import javax.inject.Inject
@@ -38,4 +40,11 @@ class RemoteDataSourceImpl @Inject constructor(
         return photos.map { it.toPhoto() }
     }
 
+    override suspend fun getPhoto(id: Long): Photo {
+        val photo = api.getPhoto(
+            AuthConfig.getKey(),
+            id
+        )
+        return photo.toPhoto()
+    }
 }

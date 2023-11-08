@@ -7,7 +7,7 @@ import android.text.TextUtils
 import android.view.Gravity
 import androidx.appcompat.widget.AppCompatTextView
 import com.codingub.bitcupapp.R
-import com.codingub.bitcupapp.common.FeaturedType
+import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.utils.DrawableUtil
 import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.Resource
@@ -18,7 +18,7 @@ import com.codingub.bitcupapp.utils.extension.mixWith
 @SuppressLint("ViewConstructor")
 class FeaturedView(
     context: Context,
-    val category: FeaturedType
+    collection: FeaturedCollection
 ) : AppCompatTextView(context) {
 
     var isChecked: Boolean = false
@@ -45,7 +45,7 @@ class FeaturedView(
         isSingleLine = true
         ellipsize = TextUtils.TruncateAt.END
         gravity = Gravity.CENTER
-        text = category.name
+        text = collection.title
         setTextColor(Resource.color(R.color.text_color))
         textSize = 5f.dp
         checkProgress = isChecked.asFloat()

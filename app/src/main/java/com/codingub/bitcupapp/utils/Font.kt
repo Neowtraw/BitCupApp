@@ -19,4 +19,5 @@ object Font {
 
     val REGULAR: Typeface get() = font("regular")
     val LIGHT: Typeface get() = font("light")
+    val BOLD: Typeface get() = font("bold")
 }

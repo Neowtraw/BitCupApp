@@ -21,7 +21,7 @@ class GetPhoto @Inject constructor(
     private val repository: AppRepository
 ) {
 
-    operator fun invoke(id: Long) : Flow<Photo> {
+    suspend operator fun invoke(id: Long) : ResultState<Photo> {
         return repository.getPhoto(id = id)
     }
 }

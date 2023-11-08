@@ -3,16 +3,21 @@ package com.codingub.bitcupapp.presentation
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentTransaction
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.databinding.ActivityMainBinding
 import com.codingub.bitcupapp.presentation.fragments.HomeFragment
 import com.codingub.bitcupapp.ui.base.BaseFragment
+import com.codingub.bitcupapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,6 +46,8 @@ class MainActivity : AppCompatActivity() {
                 vm.isLoading.value
             }
         }
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         super.onCreate(savedInstanceState)
 
         Instance = this

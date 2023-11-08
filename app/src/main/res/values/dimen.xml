@@ -14,6 +14,7 @@
 
     <!-- text -->
     <dimen name="main_text">14sp</dimen>
+    <dimen name="big_text">18sp</dimen>
 
     <!-- image -->
     <dimen name="image_corner">16dp</dimen>

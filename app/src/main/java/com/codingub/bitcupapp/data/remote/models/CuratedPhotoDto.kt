@@ -14,6 +14,5 @@ data class CuratedPhotoDto(
     val src: SrcType,
     val liked: Boolean,
     val alt: String
-
 )
 
