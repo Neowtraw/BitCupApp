@@ -8,8 +8,6 @@ import javax.inject.Singleton
 @Singleton
 object AuthConfig {
 
-    private val key_user_auth = "auth_token"
-
     private val prefs: SharedPreferences by lazy {
         App.getInstance().getSharedPreferences(
             "${App.getInstance().packageName}_${this::class.java.simpleName}",
@@ -18,11 +16,6 @@ object AuthConfig {
     }
     private val editor: SharedPreferences.Editor get() = prefs.edit()
 
-    private var key: String = ""
-
-    fun getKey(): String = prefs.getString(key_user_auth, "") ?: ""
-    fun setKey(value: String) {
-        key = value
-        editor.putString(key_user_auth, key).commit()
-    }
+    private var key: String = "Q81tm36QnR3mZpRhOdAXBHyFkYRrytsQPJGIflwd0m5eelvgOOM77DYx"
+    fun getKey() = key
 }

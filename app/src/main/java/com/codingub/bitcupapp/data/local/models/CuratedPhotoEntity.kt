@@ -18,11 +18,7 @@ data class CuratedPhotoEntity(
     val photoSrc: SrcType,
     val liked: Boolean,
     val alt: String,
-
-    val favorite: Boolean,
-    //db relation
-    val featureCollectionTitle: String?
-)
+    )
 
 
 

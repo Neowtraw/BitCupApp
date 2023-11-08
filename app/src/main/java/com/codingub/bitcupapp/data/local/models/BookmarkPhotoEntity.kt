@@ -1,8 +1,12 @@
-package com.codingub.bitcupapp.domain.models
+package com.codingub.bitcupapp.data.local.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.codingub.bitcupapp.data.utils.SrcType
 
-data class Photo(
+@Entity(tableName = "BookmarkPhoto")
+data class BookmarkPhotoEntity(
+    @PrimaryKey
     val id: Long,
     val width: Long,
     val height: Long,
@@ -13,5 +17,5 @@ data class Photo(
     val avgColor: String,
     val photoSrc: SrcType,
     val liked: Boolean,
-    val alt: String,
-    )
+    val alt: String
+)

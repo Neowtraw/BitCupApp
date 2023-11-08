@@ -38,7 +38,7 @@ class CuratedPhotoAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
             internal fun binding(){
-                ImageUtil.load(Uri.parse(photos[bindingAdapterPosition].src.medium)) {
+                ImageUtil.load(Uri.parse(photos[bindingAdapterPosition].photoSrc.small)) {
                     binding.imgPhoto.apply {
                         setImageDrawable(it)
                     }

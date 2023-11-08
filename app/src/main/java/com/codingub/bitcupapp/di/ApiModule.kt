@@ -26,4 +26,5 @@ object ApiModule {
     @Singleton
     fun provideHistoryAppService(networking: AppNetworking): AppApi =
         networking.historyAppApi()
+
 }

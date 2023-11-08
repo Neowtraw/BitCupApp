@@ -2,6 +2,7 @@ package com.codingub.bitcupapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.codingub.bitcupapp.data.local.AppDao
 import com.codingub.bitcupapp.data.local.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -21,4 +22,9 @@ object RoomModule {
             context, AppDatabase::class.java, "history"
         ).build()
     }
+
+    @Provides
+    fun provideAppDao(
+        database: AppDatabase
+    ): AppDao = database.appDao()
 }

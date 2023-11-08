@@ -2,6 +2,8 @@ package com.codingub.bitcupapp.common
 
 object Constants {
 
+    //workManager
+    const val UPDATE_INTERVAL = 30L
 
 
     object Injection{

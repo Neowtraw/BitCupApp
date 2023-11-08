@@ -33,3 +33,9 @@ val Float.sp get() = this / Resources.getSystem().displayMetrics.density
 fun Boolean.asInt(): Int = if (this) 1 else 0
 
 fun Boolean.asFloat(): Float = asInt().toFloat()
+
+fun Any?.isEmptyOrNull(): Boolean {
+    if (this is Collection<*>?) return this.isNullOrEmpty()
+    if (this is String?) return this.isNullOrEmpty()
+    return this == null
+}
