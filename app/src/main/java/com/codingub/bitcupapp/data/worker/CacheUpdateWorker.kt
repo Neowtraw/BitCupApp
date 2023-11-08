@@ -10,14 +10,15 @@ import com.codingub.bitcupapp.data.worker.util.WorkerConstants
 import com.codingub.bitcupapp.domain.repository.AppRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @HiltWorker
 class CacheUpdateWorker @AssistedInject constructor(
-    @Assisted private val appContext: Context,
+    @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,
     private val repository: AppRepository
-) : CoroutineWorker(appContext, workerParameters) {
+) : CoroutineWorker(context, workerParameters) {
 
     override suspend fun doWork(): Result {
         return try {

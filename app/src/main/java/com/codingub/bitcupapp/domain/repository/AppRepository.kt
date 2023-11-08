@@ -13,7 +13,7 @@ interface AppRepository {
     fun getFeaturedCollections() : Flow<ResultState<List<FeaturedCollection>>>
     fun getLastCuratedPhotos() : Flow<ResultState<List<Photo>>>
     suspend fun getPhoto(id: Long) : ResultState<Photo>
-    fun getBookmarkPhotos(id: Long) : Flow<List<Photo>>
+    fun getBookmarkPhotos() : Flow<List<Photo>>
 
     suspend fun searchPhotos(query: String) : ResultState<List<Photo>>
 

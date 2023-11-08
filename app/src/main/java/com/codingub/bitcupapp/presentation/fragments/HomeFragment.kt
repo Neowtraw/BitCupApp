@@ -17,6 +17,8 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -33,6 +35,7 @@ import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.AssetUtil
 import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ImageUtil
+import com.codingub.bitcupapp.utils.ItemDecoration
 import com.codingub.bitcupapp.utils.Resource
 import com.codingub.bitcupapp.utils.extension.dp
 import com.codingub.bitcupapp.utils.extension.isEmptyOrNull
@@ -59,6 +62,7 @@ class HomeFragment : BaseFragment() {
         binding = FragmentHomeBinding.inflate(inf, con, false)
 
         //ui
+        customizeUI()
         customizeSearch()
         createTabLayout()
         createPhotoView()
@@ -66,6 +70,13 @@ class HomeFragment : BaseFragment() {
         setupListeners()
         observeChanges()
         return binding.root
+    }
+
+
+    private fun customizeUI() {
+        binding.tvTryAgain.typeface = Font.BOLD
+        binding.tvNoResult.typeface = Font.REGULAR
+        binding.tvExplore.typeface = Font.REGULAR
     }
 
     private fun customizeSearch() {
@@ -80,13 +91,12 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
-        binding.tvTryAgain.typeface = Font.BOLD
     }
 
     private fun createTabLayout() {
         categoriesLayout = TabLayout(requireContext()).apply {
             visibility = View.GONE
-            setPadding(0, 24.dp, 0, 0)
+            setPadding(22.dp, 24.dp, 22.dp, 0)
             id = View.generateViewId()
             setBackgroundResource(R.color.background)
             tabMode = TabLayout.MODE_AUTO
@@ -112,6 +122,7 @@ class HomeFragment : BaseFragment() {
     private fun createPhotoView() {
         photoContainerView = RecyclerView(requireContext()).apply {
             visibility = View.GONE
+            setPadding(22.dp, 0, 22.dp, 0)
             setHasFixedSize(true)
             layoutManager = StaggeredGridLayoutManager(
                 2,
@@ -122,7 +133,7 @@ class HomeFragment : BaseFragment() {
                 pushFragment(DetailsFragment(), "details")
             }
             adapter = photoAdapter
-            addItemDecoration(createItemDecoration())
+            addItemDecoration(ItemDecoration.createItemDecoration(8))
         }
         binding.root.addView(
             photoContainerView, LinearLayout.LayoutParams(
@@ -130,25 +141,6 @@ class HomeFragment : BaseFragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         )
-    }
-
-    private fun createItemDecoration(): RecyclerView.ItemDecoration {
-        return object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect,
-                view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
-            ) {
-                val spacing = 8.dp
-                outRect.apply {
-                    left = spacing
-                    top = spacing
-                    right = spacing
-                    bottom = spacing
-                }
-            }
-        }
     }
 
     private fun setupListeners() {
@@ -193,7 +185,13 @@ class HomeFragment : BaseFragment() {
 
         binding.tvTryAgain.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
+                vm.getCuratedPhotos()
                 vm.getCollections()
+            }
+        }
+
+        binding.tvExplore.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
                 vm.getCuratedPhotos()
             }
         }
@@ -202,6 +200,7 @@ class HomeFragment : BaseFragment() {
 
 
     override fun observeChanges() {
+
         with(vm) {
             getCollectionsLiveData().observe(viewLifecycleOwner) {
                 when (it) {
@@ -221,10 +220,18 @@ class HomeFragment : BaseFragment() {
                                 }
                             }
                         }
+                        showSuccess()
+
                     }
+
                     is ResultState.Error -> {
-                        Toast.makeText(requireContext(), it.error?.message.toString(), Toast.LENGTH_LONG)
-                        showNetworkError()
+                        showError()
+
+                        Toast.makeText(
+                            requireContext(),
+                            it.error?.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
@@ -239,22 +246,39 @@ class HomeFragment : BaseFragment() {
                     is ResultState.Success -> {
                         photoAdapter.photos = it.data ?: emptyList()
                         photoAdapter.notifyDataSetChanged()
-                        showResults(photoAdapter.photos)
 
+                        showSuccess()
                     }
 
                     is ResultState.Error -> {
-                        Toast.makeText(requireContext(), it.error?.message.toString(), Toast.LENGTH_LONG)
-                        showNetworkError()
+                        showError()
+
+                        Toast.makeText(
+                            requireContext(),
+                            it.error?.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
         }
+
     }
 
-    /*
-        Visibility
-     */
+    private fun showSuccess() {
+        binding.llNetwork.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+
+        if (vm.getCollectionsLiveData().value is ResultState.Success && categoriesLayout.visibility == View.GONE)
+            categoriesLayout.visibility = View.VISIBLE
+        if (vm.getPhotosLiveData().value is ResultState.Success && photoContainerView.visibility == View.GONE
+            && vm.getPhotosLiveData().value!!.data?.isEmpty() == false
+        ) {
+            photoContainerView.visibility = View.VISIBLE
+        } else {
+            binding.llEmpty.visibility = View.VISIBLE
+        }
+    }
 
     private fun showLoading() {
         binding.progressBar.visibility = View.VISIBLE
@@ -265,8 +289,7 @@ class HomeFragment : BaseFragment() {
         binding.llEmpty.visibility = View.GONE
     }
 
-    private fun showNetworkError() {
-
+    private fun showError() {
         binding.llNetwork.visibility = View.VISIBLE
         binding.progressBar.visibility = View.VISIBLE
 
@@ -274,27 +297,4 @@ class HomeFragment : BaseFragment() {
         photoContainerView.visibility = View.GONE
         categoriesLayout.visibility = View.GONE
     }
-
-    private fun showResults(photos: List<Photo>) {
-        lifecycleScope.launch(Dispatchers.Main) {
-            delay(300)
-            binding.llNetwork.visibility = View.GONE
-            binding.progressBar.visibility = View.GONE
-
-            if(photos.isEmpty()) {
-
-                binding.llEmpty.visibility = View.VISIBLE
-                categoriesLayout.visibility = View.VISIBLE
-
-                return@launch
-            }
-            categoriesLayout.visibility = View.VISIBLE
-
-
-            photoContainerView.visibility = View.VISIBLE
-
-        }
-
-    }
-
 }

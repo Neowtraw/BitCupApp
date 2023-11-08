@@ -10,6 +10,7 @@ object Dependencies {
     const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
     const val hiltAgp = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}"
     const val hiltCompose = "androidx.hilt:hilt-work:${Versions.hiltCompose}"
+    const val hiltCompilerKapt = "androidx.hilt:hilt-compiler:${Versions.hiltCompose}"
     const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigation}"
 
     const val okHttp = "com.squareup.okhttp3:okhttp:${Versions.okHttp}"
@@ -62,6 +63,7 @@ fun DependencyHandler.hilt() {
     implementation(Dependencies.hiltAndroid)
     implementation(Dependencies.hiltCompose)
     kapt(Dependencies.hiltCompiler)
+    kapt(Dependencies.hiltCompilerKapt)
     implementation(Dependencies.hiltNavigation)
 }
 

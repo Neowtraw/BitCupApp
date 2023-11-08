@@ -97,8 +97,8 @@ class AppRepositoryImpl @Inject constructor(
 
     }
 
-    override fun getBookmarkPhotos(id: Long): Flow<List<Photo>> {
-        return localDataSource.getBookmarkPhotos(id)
+    override fun getBookmarkPhotos(): Flow<List<Photo>> {
+        return localDataSource.getBookmarkPhotos()
     }
 
     override suspend fun searchPhotos(query: String): ResultState<List<Photo>> {
@@ -113,7 +113,7 @@ class AppRepositoryImpl @Inject constructor(
 
     override fun initCacheUpdater() {
         val updateWorkRequest = PeriodicWorkRequestBuilder<CacheUpdateWorker>(
-            Constants.UPDATE_INTERVAL, TimeUnit.MINUTES
+            Constants.UPDATE_INTERVAL, TimeUnit.HOURS
         )
             .setConstraints(workConstraints)
             .addTag(WorkerConstants.WORKER_TAG)

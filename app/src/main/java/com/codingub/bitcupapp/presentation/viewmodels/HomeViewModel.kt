@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
     private val getFeaturedCollections: GetFeaturedCollections,
     private val getLastCuratedPhotos: GetLastCuratedPhotos,
     private val searchPhotos: SearchPhotos,
-    private val initCacheUpdater: InitCacheUpdater
+    initCacheUpdater: InitCacheUpdater
 ) : ViewModel(){
 
     private val collectionsLiveData: MutableLiveData<ResultState<List<FeaturedCollection>>> = MutableLiveData()
@@ -33,9 +33,8 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-        getCollections()
-        getCuratedPhotos()
         initCacheUpdater()
+        getCollections()
     }
 
     fun getCollections(){
@@ -43,8 +42,6 @@ class HomeViewModel @Inject constructor(
             val collectionsFlow = getFeaturedCollections()
             collectionsFlow.collect{ collections ->
                 setCollectionsLiveData(collections)
-               // Log.d("test", "Successfully")
-                Log.d("test", collections.data.toString())
             }
         }
     }
@@ -55,8 +52,6 @@ class HomeViewModel @Inject constructor(
             val photosFlow = getLastCuratedPhotos()
             photosFlow.collect{ photos ->
                 setPhotosLiveData(photos)
-                Log.d("test", "Successfully")
-                Log.d("test", photos.data.toString())
             }
         }
     }

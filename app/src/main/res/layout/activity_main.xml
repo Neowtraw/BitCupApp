@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.MainActivity">
+    tools:context=".presentation.MainActivity"
+    android:paddingTop="20dp">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view"
@@ -23,7 +24,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="55dp"
         android:background="@color/background"
         app:itemActiveIndicatorStyle="@color/background"
         app:itemBackground="@drawable/main_tab_background"

@@ -41,7 +41,7 @@ class LocalDataSourceImpl @Inject constructor(
         return dao.getPhoto(id).map { it.toPhoto() }
     }
 
-    override fun getBookmarkPhotos(id: Long) : Flow<List<Photo>> {
+    override fun getBookmarkPhotos() : Flow<List<Photo>> {
         return dao.getBookmarkPhotos().map {
             it.map { collection -> collection.toPhoto() }
         }

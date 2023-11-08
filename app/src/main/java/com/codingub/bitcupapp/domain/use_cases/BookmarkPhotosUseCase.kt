@@ -27,7 +27,7 @@ class GetBookmarkPhotos @Inject constructor(
     private val repository: AppRepository
 ) {
 
-    operator fun invoke(id: Long) : Flow<List<Photo>> {
-        return repository.getBookmarkPhotos(id)
+    operator fun invoke() : Flow<List<Photo>> {
+        return repository.getBookmarkPhotos()
     }
 }

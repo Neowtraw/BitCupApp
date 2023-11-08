@@ -18,11 +18,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bookmarksView"
+        android:id="@+id/rvBookmarksView"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_marginTop="29dp"
-        android:visibility="gone"
+        android:layout_marginEnd="@dimen/main_padding"
+        android:layout_marginStart="@dimen/main_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBookmarks" />
 
@@ -74,9 +76,10 @@
 
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNoBookmarks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_results_found"
+            android:text="@string/no_bookmarks_found"
             android:textSize="@dimen/main_text"
             android:textColor="@color/text_color"
             android:layout_marginBottom="12dp"/>

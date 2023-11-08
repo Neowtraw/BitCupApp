@@ -31,8 +31,6 @@ class DetailsViewModel @Inject constructor(
     val photo: LiveData<ResultState<Photo>> get() = _photo
 
 
-
-
     fun getPhotoInfo(id: Long) {
         _photo.value = ResultState.Loading()
         viewModelScope.launch {
