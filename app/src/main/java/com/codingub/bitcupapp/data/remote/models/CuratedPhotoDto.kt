@@ -8,9 +8,9 @@ data class CuratedPhotoDto(
     val height: Long,
     val url: String,
     val photographer: String,
-    val photographerUrl: String,
+    val photographerUrl: String?,
     val photographerId: Long,
-    val avgColor: String,
+    val avgColor: String?,
     val src: SrcType,
     val liked: Boolean,
     val alt: String

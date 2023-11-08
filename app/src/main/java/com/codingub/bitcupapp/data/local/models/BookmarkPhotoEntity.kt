@@ -12,9 +12,9 @@ data class BookmarkPhotoEntity(
     val height: Long,
     val photoUrl: String,
     val photographer: String,
-    val photographerUrl: String,
+    val photographerUrl: String?,
     val photographerId: Long,
-    val avgColor: String,
+    val avgColor: String?,
     val photoSrc: SrcType,
     val liked: Boolean,
     val alt: String

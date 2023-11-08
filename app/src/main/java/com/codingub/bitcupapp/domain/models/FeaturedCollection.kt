@@ -7,6 +7,5 @@ data class FeaturedCollection(
     val collectionPrivate: Boolean,
     val mediaCount: Int,
     val photosCount: Int,
-    val videoCount: Int,
-    val curatedPhotos: List<Photo> = emptyList()
+    val videoCount: Int
 )

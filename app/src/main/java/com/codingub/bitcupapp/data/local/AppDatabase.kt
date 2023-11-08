@@ -10,7 +10,7 @@ import com.codingub.bitcupapp.data.local.models.FeaturedCollectionEntity
 
 @Database(
 entities = [FeaturedCollectionEntity::class, CuratedPhotoEntity::class, BookmarkPhotoEntity::class],
-    version = 1
+    version = 3
 )
 @TypeConverters(TypeConverter::class)
 abstract class AppDatabase : RoomDatabase(){

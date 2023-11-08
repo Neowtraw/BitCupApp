@@ -1,5 +1,6 @@
 package com.codingub.bitcupapp.data.utils
 
+import com.codingub.bitcupapp.common.Constants
 import com.codingub.bitcupapp.common.Constants.Injection.ENDPOINT
 import com.codingub.bitcupapp.common.Constants.Injection.IS_DEBUG
 import com.codingub.bitcupapp.data.remote.AppApi
@@ -7,6 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -35,6 +37,9 @@ class AppNetworking @Inject constructor(
                         else HttpLoggingInterceptor.Level.NONE
                     )
                 })
+                .connectTimeout(Constants.DURATION, TimeUnit.SECONDS)
+                .readTimeout(Constants.DURATION, TimeUnit.SECONDS)
+                .writeTimeout(Constants.DURATION, TimeUnit.SECONDS)
 
             okHttpClient = builder.build()
         }

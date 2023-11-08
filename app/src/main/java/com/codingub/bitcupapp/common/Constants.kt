@@ -5,6 +5,10 @@ object Constants {
     //workManager
     const val UPDATE_INTERVAL = 30L
 
+    //api
+    const val DURATION = 180L
+
+
 
     object Injection{
         const val IS_DEBUG = "is-debug"

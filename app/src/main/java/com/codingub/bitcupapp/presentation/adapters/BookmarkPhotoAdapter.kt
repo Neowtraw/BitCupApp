@@ -6,16 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.codingub.bitcupapp.databinding.ItemBookmarkPhotoBinding
 import com.codingub.bitcupapp.databinding.ItemCuratedPhotoBinding
 import com.codingub.bitcupapp.domain.models.Photo
+import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ImageUtil
 import java.util.Random
 
-class CuratedPhotoAdapter(
+class BookmarkPhotoAdapter(
     private inline val onPhotoSelected: (Photo) -> Unit
-) : RecyclerView.Adapter<CuratedPhotoAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<BookmarkPhotoAdapter.ViewHolder>() {
 
-    private lateinit var binding: ItemCuratedPhotoBinding
+    private lateinit var binding: ItemBookmarkPhotoBinding
 
     //list of photos from db
     var photos: List<Photo>
@@ -35,31 +37,36 @@ class CuratedPhotoAdapter(
     private val differ = AsyncListDiffer(this, diffCallback)
 
 
-    inner class ViewHolder(private val binding: ItemCuratedPhotoBinding) :
+    inner class ViewHolder(private val binding: ItemBookmarkPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-            internal fun binding(){
-                val photo = photos[bindingAdapterPosition]
-                val random = Random()
-                val photoSrc = if (random.nextBoolean()) photo.photoSrc.large else photo.photoSrc.medium
+        internal fun binding(){
+            val photo = photos[bindingAdapterPosition]
+            val random = Random()
+            val photoSrc = if (random.nextBoolean()) photo.photoSrc.large else photo.photoSrc.medium
 
-                ImageUtil.load(Uri.parse(photoSrc)) {
-                    binding.imgPhoto.apply {
-                        setImageDrawable(it)
-                    }
+            ImageUtil.load(Uri.parse(photoSrc)) {
+                binding.imgPhoto.apply {
+                    setImageDrawable(it)
                 }
             }
 
-            init {
-                binding.root.setOnClickListener {
-                    onPhotoSelected(photos[bindingAdapterPosition])
-                }
+            binding.tvPhotographer.apply {
+                typeface = Font.REGULAR
+                text = photo.photographer
             }
+        }
+
+        init {
+            binding.root.setOnClickListener {
+                onPhotoSelected(photos[bindingAdapterPosition])
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding =
-            ItemCuratedPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemBookmarkPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

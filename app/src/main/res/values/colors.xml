@@ -9,6 +9,7 @@
 
     <!-- text -->
     <color name="text_color">#1E1E1E</color>
+    <color name="photographer_color">#FFFFFFFF</color>
     <color name="text_color_checked">#FFFFFFFF</color>
     <color name="add_text">#868686</color>
 

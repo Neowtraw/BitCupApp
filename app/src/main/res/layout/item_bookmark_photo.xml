@@ -22,6 +22,7 @@
                 android:scaleType="fitCenter" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvPhotographer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
@@ -31,7 +32,7 @@
                 android:paddingTop="6dp"
                 android:paddingBottom="8dp"
                 android:singleLine="true"
-                android:textColor="@color/text_color"
+                android:textColor="@color/photographer_color"
                 android:textSize="@dimen/main_text" />
         </FrameLayout>
 

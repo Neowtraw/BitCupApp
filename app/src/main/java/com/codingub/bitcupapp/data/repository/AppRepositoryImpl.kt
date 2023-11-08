@@ -46,14 +46,14 @@ class AppRepositoryImpl @Inject constructor(
                 collections.isEmptyOrNull()
             },
             fetch = {
-                delay(2000)
                 remoteDataSource.getFeaturedCollections()
             },
             saveFetchResult = {
-                Log.d("AppRepository", it.toString())
+                localDataSource.insertFeaturedCollections(it)
+                Log.d("AppRepositorySaved", it.toString())
             },
             onFetchFailed = {
-                Log.d("AppRepository", it.toString())
+                Log.d("AppRepositoryFailed", it.toString())
             },
             dispatcher = dispatcher
         )
@@ -70,10 +70,11 @@ class AppRepositoryImpl @Inject constructor(
             remoteDataSource.getCuratedPhotos()
         },
         saveFetchResult = {
-            Log.d("AppRepository", it.toString())
+            localDataSource.insertCuratedPhotos(it)
+            Log.d("AppRepositorySaved", it.toString())
         },
         onFetchFailed = {
-            Log.d("AppRepository", it.toString())
+            Log.d("AppRepositoryFailed", it.toString())
         },
         dispatcher = dispatcher
     )

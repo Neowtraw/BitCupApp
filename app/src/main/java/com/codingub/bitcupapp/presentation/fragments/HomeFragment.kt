@@ -4,19 +4,24 @@ package com.codingub.bitcupapp.presentation.fragments
 import android.graphics.Outline
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.LinearLayout
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.FeaturedType
+import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentHomeBinding
+import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.presentation.adapters.CuratedPhotoAdapter
 import com.codingub.bitcupapp.presentation.custom.FeaturedView
+import com.codingub.bitcupapp.presentation.viewmodels.HomeViewModel
 import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.AssetUtil
 import com.codingub.bitcupapp.utils.Font
@@ -31,11 +36,13 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : BaseFragment() {
 
+    private val vm: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
 
     private lateinit var categoriesLayout: TabLayout
     private lateinit var photoContainerView: RecyclerView
     private lateinit var photoAdapter: CuratedPhotoAdapter
+    private lateinit var featuredCollections: List<FeaturedCollection>
 
     override fun createView(inf: LayoutInflater, con: ViewGroup?, state: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inf, con, false)
@@ -45,6 +52,7 @@ class HomeFragment : BaseFragment() {
         createTabLayout()
         createPhotoView()
 
+        setupListeners()
         observeChanges()
         return binding.root
     }
@@ -154,7 +162,40 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    override fun observeChanges() {
+    private fun setupListeners() {
+    }
 
+    override fun observeChanges() {
+        with(vm) {
+            getCollectionsLiveData().observe(viewLifecycleOwner) {
+
+                when (it) {
+                    is ResultState.Loading -> {
+                        Log.d("GetCollections", "Loading")
+                    }
+                    is ResultState.Success -> {
+                        featuredCollections = it.data ?: emptyList()
+                    }
+                    is ResultState.Error -> {}
+                }
+            }
+
+            getPhotosLiveData().observe(viewLifecycleOwner) {
+
+                when(it){
+                    is ResultState.Loading -> {
+                        Log.d("GetPhotos", "Loading")
+
+                    }
+
+                    is ResultState.Success -> {
+                        photoAdapter.photos = it.value
+                        Log.d("photos", it.value.toString())
+                        photoAdapter.notifyDataSetChanged()
+                    }
+                    is ResultState.Error -> {}
+                }
+            }
+        }
     }
 }

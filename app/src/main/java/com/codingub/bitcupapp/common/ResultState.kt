@@ -5,6 +5,7 @@ sealed class ResultState<T>(
     val error: Throwable? = null
 ) {
     class Loading<T>(data: T? = null) : ResultState<T>(data)
-    class Success<T>(data: T) : ResultState<T>(data)
+    class Success<T>(val value: T) : ResultState<T>(value)
     class Error<T>(throwable: Throwable, data: T? = null) : ResultState<T>(data, throwable)
+
 }
