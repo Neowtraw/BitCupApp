@@ -27,7 +27,7 @@ inline fun <ResultType, RequestType> NetworkBoundResultState(
 
             try {
                 saveFetchResult(fetch())
-                query().map {ResultState.Success(it) }
+                query().map { ResultState.Success(it) }
             } catch (throwable: Throwable) {
                 onFetchFailed(throwable)
                 query().map { ResultState.Error(throwable, it) }

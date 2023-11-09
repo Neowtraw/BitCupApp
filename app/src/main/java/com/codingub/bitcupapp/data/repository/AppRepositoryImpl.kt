@@ -9,6 +9,7 @@ import androidx.work.WorkManager
 import com.codingub.bitcupapp.common.Constants
 import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.data.local.datasource.LocalDataSource
+import com.codingub.bitcupapp.data.local.models.BookmarkPhotoEntity
 import com.codingub.bitcupapp.data.remote.datasource.RemoteDataSource
 import com.codingub.bitcupapp.data.utils.NetworkBoundResultState
 import com.codingub.bitcupapp.data.worker.CacheUpdateWorker
@@ -18,8 +19,13 @@ import com.codingub.bitcupapp.domain.models.Photo
 import com.codingub.bitcupapp.domain.repository.AppRepository
 import com.codingub.bitcupapp.utils.extension.isEmptyOrNull
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -39,12 +45,16 @@ class AppRepositoryImpl @Inject constructor(
     override fun getFeaturedCollections(): Flow<ResultState<List<FeaturedCollection>>> =
         NetworkBoundResultState(
             query = {
+                Log.d("AppRepository", "Query")
+
                 localDataSource.getFeaturedCollections()
+
             },
-            shouldFetch = { collections ->
-                collections.isEmptyOrNull()
+            shouldFetch = {
+                it.isNullOrEmpty()
             },
             fetch = {
+                Log.d("AppRepository", "Fetch")
                 remoteDataSource.getFeaturedCollections()
             },
             saveFetchResult = {
@@ -61,11 +71,10 @@ class AppRepositoryImpl @Inject constructor(
         query = {
             localDataSource.getLastCuratedPhotos()
         },
-        shouldFetch = { photos ->
-            photos.isEmptyOrNull()
+        shouldFetch = {
+            it.isNullOrEmpty()
         },
         fetch = {
-            delay(2000)
             remoteDataSource.getCuratedPhotos()
         },
         saveFetchResult = {
@@ -78,12 +87,12 @@ class AppRepositoryImpl @Inject constructor(
         dispatcher = dispatcher
     )
 
-    override suspend fun insertBookmarkPhoto(photo: Photo) {
-        return localDataSource.insertBookmarkPhoto(photo)
+    override suspend fun updateBookmarkPhoto(photo: Photo) {
+        return localDataSource.updateBookmarkPhoto(photo)
     }
 
-    override suspend fun deleteBookmarkPhoto(photoId: Long) {
-        return localDataSource.deleteBookmarkPhoto(photoId)
+    override suspend fun getBookmarkPhoto(id: Long): Boolean {
+        return localDataSource.getBookmarkPhoto(id) != null
     }
 
     override suspend fun getPhoto(id: Long): ResultState<Photo> {
@@ -130,6 +139,7 @@ class AppRepositoryImpl @Inject constructor(
         try {
             val collections = remoteDataSource.getFeaturedCollections()
             localDataSource.insertFeaturedCollections(collections)
+            Log.e("updateCachedCollections", "Successfully")
         } catch (e: Exception) {
             Log.e("updateCachedCollections", e.message.toString())
             throw e
@@ -140,8 +150,9 @@ class AppRepositoryImpl @Inject constructor(
         try {
             val photos = remoteDataSource.getCuratedPhotos()
             localDataSource.insertCuratedPhotos(photos)
+            Log.e("updateCachedPhotos", "Successfully")
         } catch (e: Exception) {
-            Log.e("updateCachedCollections", e.message.toString())
+            Log.e("updateCachedPhotos", e.message.toString())
             throw e
         }
     }

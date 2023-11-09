@@ -45,4 +45,8 @@ abstract class BaseFragment : Fragment(){
     protected fun pushFragment(fragment: BaseFragment, backstack: String?) {
         mainActivity.pushFragment(fragment, backstack)
     }
+
+    protected fun backFragment() {
+        mainActivity.back()
+    }
 }

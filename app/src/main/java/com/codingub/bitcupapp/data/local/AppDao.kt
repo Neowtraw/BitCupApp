@@ -8,6 +8,8 @@ import com.codingub.bitcupapp.data.local.models.BookmarkPhotoEntity
 import com.codingub.bitcupapp.data.local.models.CuratedPhotoEntity
 import com.codingub.bitcupapp.data.local.models.FeaturedCollectionEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.count
 
 @Dao
 interface AppDao {
@@ -18,11 +20,14 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCuratedPhotos(photos: List<CuratedPhotoEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insertBookmarkPhoto(photo: BookmarkPhotoEntity)
 
     @Query("SELECT * FROM BookmarkPhoto")
     fun getBookmarkPhotos(): Flow<List<BookmarkPhotoEntity>>
+
+    @Query("SELECT * FROM BookmarkPhoto WHERE id = :id")
+    suspend fun getBookmarkPhoto(id: Long): BookmarkPhotoEntity?
 
     @Query("SELECT * FROM FeaturedCollection")
     fun getFeaturedCollections() : Flow<List<FeaturedCollectionEntity>>

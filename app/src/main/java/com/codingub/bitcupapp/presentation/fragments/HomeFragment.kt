@@ -2,23 +2,17 @@ package com.codingub.bitcupapp.presentation.fragments
 
 
 import android.graphics.Outline
-import android.graphics.Rect
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -26,7 +20,6 @@ import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentHomeBinding
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
-import com.codingub.bitcupapp.domain.models.Photo
 import com.codingub.bitcupapp.presentation.SharedViewModel
 import com.codingub.bitcupapp.presentation.adapters.CuratedPhotoAdapter
 import com.codingub.bitcupapp.presentation.custom.FeaturedView
@@ -38,12 +31,9 @@ import com.codingub.bitcupapp.utils.ImageUtil
 import com.codingub.bitcupapp.utils.ItemDecoration
 import com.codingub.bitcupapp.utils.Resource
 import com.codingub.bitcupapp.utils.extension.dp
-import com.codingub.bitcupapp.utils.extension.isEmptyOrNull
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -57,9 +47,14 @@ class HomeFragment : BaseFragment() {
     private lateinit var photoContainerView: RecyclerView
     private lateinit var photoAdapter: CuratedPhotoAdapter
     private lateinit var featuredCollections: List<FeaturedCollection>
+    private val tabs: MutableList<TabLayout.Tab> = mutableListOf()
+
 
     override fun createView(inf: LayoutInflater, con: ViewGroup?, state: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inf, con, false)
+
+        vm.getCollections()
+        vm.getCuratedPhotos()
 
         //ui
         customizeUI()
@@ -67,16 +62,22 @@ class HomeFragment : BaseFragment() {
         createTabLayout()
         createPhotoView()
 
-        setupListeners()
-        observeChanges()
         return binding.root
+    }
+
+    override fun viewCreated() {
+        observeChanges()
+        setupListeners()
     }
 
 
     private fun customizeUI() {
-        binding.tvTryAgain.typeface = Font.BOLD
-        binding.tvNoResult.typeface = Font.REGULAR
-        binding.tvExplore.typeface = Font.REGULAR
+        binding.llNetwork.tvTryAgain.typeface = Font.BOLD
+        binding.llNotFound.tvNoResult.apply {
+            typeface = Font.REGULAR
+            text = Resource.string(R.string.no_results_found)
+        }
+        binding.llNotFound.tvExplore.typeface = Font.REGULAR
     }
 
     private fun customizeSearch() {
@@ -148,6 +149,7 @@ class HomeFragment : BaseFragment() {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!s.isNullOrEmpty()) {
+
                     lifecycleScope.launch(Dispatchers.IO) {
                         vm.searchPhoto(s.toString())
                     }
@@ -169,8 +171,13 @@ class HomeFragment : BaseFragment() {
         categoriesLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab) {
+                val index = tabs.indexOf(tab)
+                if (index == -1) return
+
                 val categoryView = tab.customView as FeaturedView
                 categoryView.setChecked(true, animated = true)
+
+
                 lifecycleScope.launch(Dispatchers.IO) {
                     vm.searchPhoto(categoryView.text.toString())
                 }
@@ -183,14 +190,15 @@ class HomeFragment : BaseFragment() {
             override fun onTabReselected(tab: TabLayout.Tab) = Unit
         })
 
-        binding.tvTryAgain.setOnClickListener {
+        binding.llNetwork.tvTryAgain.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                vm.getCuratedPhotos()
                 vm.getCollections()
+                vm.getCuratedPhotos()
+
             }
         }
 
-        binding.tvExplore.setOnClickListener {
+        binding.llNotFound.tvExplore.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 vm.getCuratedPhotos()
             }
@@ -217,8 +225,12 @@ class HomeFragment : BaseFragment() {
                                     view.setPadding(8.dp, 0, 8.dp, 0)
                                 }.also {
                                     addTab(it)
+                                    selectTab(null)
+                                    tabs.add(it)
+
                                 }
                             }
+
                         }
                         showSuccess()
 
@@ -266,7 +278,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun showSuccess() {
-        binding.llNetwork.visibility = View.GONE
+        binding.llNetwork.llNetwork.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
 
         if (vm.getCollectionsLiveData().value is ResultState.Success && categoriesLayout.visibility == View.GONE)
@@ -276,24 +288,24 @@ class HomeFragment : BaseFragment() {
         ) {
             photoContainerView.visibility = View.VISIBLE
         } else {
-            binding.llEmpty.visibility = View.VISIBLE
+            binding.llNotFound.llNotFound.visibility = View.VISIBLE
         }
     }
 
     private fun showLoading() {
         binding.progressBar.visibility = View.VISIBLE
 
-        binding.llNetwork.visibility = View.GONE
+        binding.llNetwork.llNetwork.visibility = View.GONE
         photoContainerView.visibility = View.GONE
         categoriesLayout.visibility = View.GONE
-        binding.llEmpty.visibility = View.GONE
+        binding.llNotFound.llNotFound.visibility = View.GONE
     }
 
     private fun showError() {
-        binding.llNetwork.visibility = View.VISIBLE
+        binding.llNetwork.llNetwork.visibility = View.VISIBLE
         binding.progressBar.visibility = View.VISIBLE
 
-        binding.llEmpty.visibility = View.GONE
+        binding.llNotFound.llNotFound.visibility = View.GONE
         photoContainerView.visibility = View.GONE
         categoriesLayout.visibility = View.GONE
     }

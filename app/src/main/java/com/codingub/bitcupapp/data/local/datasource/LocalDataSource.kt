@@ -8,13 +8,13 @@ interface LocalDataSource {
 
     suspend fun insertFeaturedCollections(collections: List<FeaturedCollection>)
     suspend fun insertCuratedPhotos(photos: List<Photo>)
-    suspend fun insertBookmarkPhoto(photo: Photo)
 
-    suspend fun deleteBookmarkPhoto(photoId: Long)
+    suspend fun updateBookmarkPhoto(photo: Photo)
 
     fun getFeaturedCollections() : Flow<List<FeaturedCollection>>
     fun getLastCuratedPhotos() : Flow<List<Photo>>
     fun getPhoto(id: Long) : Flow<Photo>
+    suspend fun getBookmarkPhoto(id: Long) : Photo?
     fun getBookmarkPhotos() : Flow<List<Photo>>
 
 

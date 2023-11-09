@@ -5,23 +5,22 @@ import com.codingub.bitcupapp.domain.repository.AppRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-
-class InsertBookmarkPhoto @Inject constructor(
+class IsBookmarkPhoto @Inject constructor(
     private val repository: AppRepository
 ) {
-
-    suspend operator fun invoke(photo: Photo) {
-        return repository.insertBookmarkPhoto(photo)
+    suspend operator fun invoke(id: Long) : Boolean{
+        return repository.getBookmarkPhoto(id)
     }
 }
 
-class DeleteBookmarkPhoto @Inject constructor(
+class UpdateBookmarkPhoto @Inject constructor(
     private val repository: AppRepository
 ) {
-    suspend operator fun invoke(photoId: Long) {
-        return repository.deleteBookmarkPhoto(photoId)
+    suspend operator fun invoke(photo: Photo){
+        return repository.updateBookmarkPhoto(photo)
     }
 }
+
 
 class GetBookmarkPhotos @Inject constructor(
     private val repository: AppRepository

@@ -40,10 +40,11 @@ class BookmarkPhotoAdapter(
     inner class ViewHolder(private val binding: ItemBookmarkPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        internal fun binding(){
+        internal fun binding() {
             val photo = photos[bindingAdapterPosition]
             val random = Random()
-            val photoSrc = if (random.nextBoolean()) photo.photoSrc.large else photo.photoSrc.medium
+            val photoSrc =
+                if (random.nextBoolean()) photo.photoSrc.large else photo.photoSrc.medium
 
             ImageUtil.load(Uri.parse(photoSrc)) {
                 binding.imgPhoto.apply {
@@ -73,5 +74,7 @@ class BookmarkPhotoAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding()
     }
+
     override fun getItemCount(): Int = photos.size
+
 }

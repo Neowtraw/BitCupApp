@@ -3,6 +3,7 @@ package com.codingub.bitcupapp.presentation
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val vm: MainActivityViewModel by viewModels()
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     //used for navigation
     private val TIME_INTERVAL: Long = 2000
@@ -67,20 +68,22 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        back()
+        onBackPressedDispatcher.addCallback(this) {
+            back()
+        }
     }
 
     /*
         UI
      */
 
-    private fun createBottomBar(){
+    private fun createBottomBar() {
         binding.bottomNavigationView.setOnItemSelectedListener {
-            when(it.itemId){
+            when (it.itemId) {
 
                 R.id.home_tab -> pushFragment(HomeFragment(), "home")
                 R.id.bookmark_tab -> pushFragment(BookmarksFragment(), "bookmark")
-                else ->{}
+                else -> {}
             }
             true
         }
@@ -90,67 +93,72 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, binding.root).let { controller ->
             controller.hide(WindowInsetsCompat.Type.systemBars())
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
     }
 
     private fun showSystemUI() {
         WindowCompat.setDecorFitsSystemWindows(window, true)
-        WindowInsetsControllerCompat(window, binding.root).show(WindowInsetsCompat.Type.systemBars())
+        WindowInsetsControllerCompat(
+            window,
+            binding.root
+        ).show(WindowInsetsCompat.Type.systemBars())
     }
 
     /*
         Navigation
      */
 
-    fun pushFragment(fragment: BaseFragment, backstack: String?){
-        val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-
+    fun pushFragment(fragment: BaseFragment, backstack: String?) {
         if (fragment is DetailsFragment) {
             binding.bottomNavigationView.visibility = View.GONE
         } else {
             binding.bottomNavigationView.visibility = View.VISIBLE
         }
 
-        fragmentTransaction.apply {
-            remove(supportFragmentManager.fragments.last())
-            setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
-            add(R.id.fragment_container_view, fragment)
-        }
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+        fragmentTransaction.replace(R.id.fragment_container_view, fragment)
+        fragmentTransaction.addToBackStack(backstack)
 
-        if (backstack != null) {
-            fragmentTransaction.addToBackStack(backstack)
-        }
 
         fragmentTransaction.commit()
     }
 
-    private fun back() {
-        onBackPressedDispatcher.addCallback(this) {
-            if (supportFragmentManager.backStackEntryCount == 0) {
-                val currentTime = System.currentTimeMillis()
-                if (currentTime - mBackPressedTime > TIME_INTERVAL) {
-                    Toast.makeText(this@MainActivity, R.string.exit_app_string, Toast.LENGTH_SHORT)
-                        .show()
-                    mBackPressedTime = currentTime
-                } else {
-                    finish()
-                }
-                return@addCallback
-            }
+    fun back() {
 
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_back)
-            val currentFragment =
-                supportFragmentManager.findFragmentById(R.id.fragment_container_view)
-            currentFragment?.view?.startAnimation(
-                AnimationUtils.loadAnimation(
-                    this@MainActivity,
-                    R.anim.slide_in
-                )
-            )
-            supportFragmentManager.popBackStack()
-            transaction.commit()
+        if (supportFragmentManager.fragments.last() is BookmarksFragment) {
+            return
         }
+        if (supportFragmentManager.fragments.last() is DetailsFragment) {
+            binding.bottomNavigationView.visibility = View.VISIBLE
+        }
+
+        if (supportFragmentManager.fragments.last() is HomeFragment) {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - mBackPressedTime > TIME_INTERVAL) {
+                Toast.makeText(this@MainActivity, R.string.exit_app_string, Toast.LENGTH_SHORT)
+                    .show()
+                mBackPressedTime = currentTime
+            } else {
+                finish()
+            }
+            return
+        }
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.fade_out, R.anim.fade_in)
+        val currentFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container_view)
+        currentFragment?.view?.startAnimation(
+            AnimationUtils.loadAnimation(
+                this@MainActivity,
+                R.anim.fade_out
+            )
+        )
+        supportFragmentManager.popBackStack()
+        transaction.commit()
+
     }
 }

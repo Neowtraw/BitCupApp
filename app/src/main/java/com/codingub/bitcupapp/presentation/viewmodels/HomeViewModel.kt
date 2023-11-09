@@ -33,8 +33,7 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-        initCacheUpdater()
-        getCollections()
+        val result = initCacheUpdater()
     }
 
     fun getCollections(){
@@ -52,6 +51,7 @@ class HomeViewModel @Inject constructor(
             val photosFlow = getLastCuratedPhotos()
             photosFlow.collect{ photos ->
                 setPhotosLiveData(photos)
+                Log.d("test1","getcurated ${collectionsLiveData.value!!.data}")
             }
         }
     }
@@ -61,6 +61,8 @@ class HomeViewModel @Inject constructor(
             setPhotosLiveData(ResultState.Loading())
             val photos = searchPhotos(query)
             setPhotosLiveData(photos)
+            Log.d("test1","search $query")
+
         }
     }
 

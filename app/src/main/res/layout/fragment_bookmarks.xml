@@ -20,11 +20,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBookmarksView"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="29dp"
         android:layout_marginEnd="@dimen/main_padding"
         android:layout_marginStart="@dimen/main_padding"
+        android:background="@color/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBookmarks" />
 
@@ -66,33 +66,9 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llEmpty"
+    <include layout="@layout/layout_not_found"
+        android:id="@+id/llNotFound"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNoBookmarks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_bookmarks_found"
-            android:textSize="@dimen/main_text"
-            android:textColor="@color/text_color"
-            android:layout_marginBottom="12dp"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvExplore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/explore"
-            android:textColor="@color/contrast"
-            android:textSize="@dimen/big_text" />
-
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

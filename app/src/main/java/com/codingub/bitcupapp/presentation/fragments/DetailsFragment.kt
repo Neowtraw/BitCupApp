@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.AnimatorRes
 import androidx.compose.foundation.Image
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentDetailsBinding
 import com.codingub.bitcupapp.databinding.FragmentHomeBinding
@@ -18,6 +20,7 @@ import com.codingub.bitcupapp.presentation.viewmodels.DetailsViewModel
 import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ImageUtil
+import com.codingub.bitcupapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,35 +40,44 @@ class DetailsFragment : BaseFragment() {
         return binding.root
     }
 
-    private fun createUI(){
+    private fun createUI() {
         binding.tvPhotographer.typeface = Font.REGULAR
+        binding.llNotFound.tvNoResult.apply {
+            typeface = Font.REGULAR
+            text = Resource.string(R.string.no_image_found)
+        }
+        binding.llNotFound.tvExplore.typeface = Font.REGULAR
     }
 
-    private fun setupListeners(){
+    private fun setupListeners() {
 
-        binding.back.setOnClickListener{
-            pushFragment(HomeFragment(), "home")
+        binding.back.setOnClickListener {
+            backFragment()
         }
         binding.bookmark.setOnClickListener {
+            vm.updateBookmark()
+            Toast.makeText(requireContext(), "Bookmark ${vm.isBookmarkLiveData.value.toString()}", Toast.LENGTH_SHORT).show()
 
         }
-        binding.download.setOnClickListener{
+        binding.download.setOnClickListener {
             Log.d("Download", "Clicked")
 
-            ImageUtil.loadBitmapFromUri(Uri.parse(vm.photo.value!!.data!!.photoSrc.large2x), requireContext()){
-                ImageUtil.saveBitmapAsImageToDevice(requireContext(),it)
+            ImageUtil.loadBitmapFromUri(
+                Uri.parse(vm.photo.value!!.data!!.photoSrc.large2x),
+                requireContext()
+            ) {
+                ImageUtil.saveBitmapAsImageToDevice(requireContext(), it)
             }
         }
 
     }
 
     override fun observeChanges() {
-        with(model){
+        with(model) {
             vm.getPhotoInfo(photoId.value!!)
         }
-        with(vm){
+        with(vm) {
             photo.observe(viewLifecycleOwner) {
-
                 when (it) {
                     is ResultState.Loading -> {
                         showLoading()
@@ -80,27 +92,54 @@ class DetailsFragment : BaseFragment() {
                                 setImageDrawable(it)
                             }
                         }
+                        isBookmark()
 
                         showResults()
                     }
 
                     is ResultState.Error -> {
-                        Toast.makeText(requireContext(), it.error?.message.toString(), Toast.LENGTH_LONG)
+                        Toast.makeText(
+                            requireContext(),
+                            it.error?.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
                         showNetworkError()
                     }
+                }
+            }
+            isBookmarkLiveData.observe(viewLifecycleOwner) {
+                if(it){
+
+                    return@observe
                 }
             }
         }
     }
 
-    private fun showLoading(){
+    private fun showLoading() {
+        binding.llNotFound.llNotFound.visibility = View.GONE
+        binding.tvPhotographer.visibility = View.GONE
+        binding.imgPhoto.llPhoto.visibility = View.GONE
+        binding.llInfo.visibility = View.GONE
 
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun showResults() {
+        binding.llNotFound.llNotFound.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+
+        binding.tvPhotographer.visibility = View.VISIBLE
+        binding.imgPhoto.llPhoto.visibility = View.VISIBLE
+        binding.llInfo.visibility = View.VISIBLE
     }
 
-    private fun showNetworkError(){
+    private fun showNetworkError() {
+        binding.tvPhotographer.visibility = View.GONE
+        binding.imgPhoto.llPhoto.visibility = View.GONE
+        binding.llInfo.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
 
+        binding.llNotFound.llNotFound.visibility = View.VISIBLE
     }
 }
