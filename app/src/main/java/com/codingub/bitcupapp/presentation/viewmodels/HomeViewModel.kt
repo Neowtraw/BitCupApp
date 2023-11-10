@@ -23,20 +23,22 @@ class HomeViewModel @Inject constructor(
     initCacheUpdater: InitCacheUpdater
 ) : ViewModel(){
 
-    private val collectionsLiveData: MutableLiveData<ResultState<List<FeaturedCollection>>> = MutableLiveData()
+
+    private val collectionsLiveData: MutableLiveData<ResultState<List<FeaturedCollection>>> = MutableLiveData(ResultState.Loading())
     fun getCollectionsLiveData(): MutableLiveData<ResultState<List<FeaturedCollection>>> = collectionsLiveData
     private fun setCollectionsLiveData(value: ResultState<List<FeaturedCollection>>) { collectionsLiveData.value = value }
 
-    private val photosLiveData: MutableLiveData<ResultState<List<Photo>>> = MutableLiveData()
+    private val photosLiveData: MutableLiveData<ResultState<List<Photo>>> = MutableLiveData(ResultState.Loading())
     fun getPhotosLiveData(): MutableLiveData<ResultState<List<Photo>>> = photosLiveData
     private fun setPhotosLiveData(value: ResultState<List<Photo>>) { photosLiveData.value = value }
 
+    var lastRequestedAction: (() -> Unit)? = null
 
     init {
-        val result = initCacheUpdater()
+        initCacheUpdater()
     }
 
-    fun getCollections(){
+    private fun getCollections(){
         viewModelScope.launch {
             val collectionsFlow = getFeaturedCollections()
             collectionsFlow.collect{ collections ->
@@ -64,6 +66,15 @@ class HomeViewModel @Inject constructor(
             Log.d("test1","search $query")
 
         }
+    }
+
+    fun updateData(){
+        getCollections()
+        getCuratedPhotos()
+    }
+
+    fun updateLastRequestedAction(action: () -> Unit) {
+        lastRequestedAction = action
     }
 
 }

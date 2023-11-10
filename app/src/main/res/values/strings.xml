@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">BitCupApp</string>
+    <string name="app_name" translatable="false">Pexels Art</string>
     <string name="exit_app_string">Click again to exit</string>
 
-    <string name="home">home</string>
-    <string name="bookmark">bookmark</string>
+    <string name="home" translatable="false">home</string>
+    <string name="bookmark" translatable="false">bookmark</string>
     <string name="search">Search</string>
 
     <string name="download">Download</string>
@@ -16,5 +16,5 @@
     <string name="bookmarks">Bookmarks</string>
     <string name="no_image_found">Image not found</string>
 
-
+    <string name="network_error">No network available</string>
 </resources>

@@ -15,9 +15,12 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgPhoto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:src="@drawable/app_icon" />
+            android:adjustViewBounds="true"
+            android:src="@drawable/placeholder"
+            android:layout_gravity="center"
+            />
 
     </androidx.cardview.widget.CardView>
 

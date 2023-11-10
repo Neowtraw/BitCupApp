@@ -69,4 +69,12 @@ class LocalDataSourceImpl @Inject constructor(
 
         dao.insertBookmarkPhoto(photo.toBookmarkPhotoEntity())
     }
+
+    override suspend fun clearCachedCuratedPhotos() {
+        dao.deleteAllCuratedPhotos()
+    }
+
+    override suspend fun clearCachedFeaturedCollections() {
+        dao.deleteAllFeaturedCollections()
+    }
 }

@@ -42,11 +42,7 @@ class BookmarkPhotoAdapter(
 
         internal fun binding() {
             val photo = photos[bindingAdapterPosition]
-            val random = Random()
-            val photoSrc =
-                if (random.nextBoolean()) photo.photoSrc.large else photo.photoSrc.medium
-
-            ImageUtil.load(Uri.parse(photoSrc)) {
+            ImageUtil.load(Uri.parse(photo.photoSrc.large)) {
                 binding.imgPhoto.apply {
                     setImageDrawable(it)
                 }

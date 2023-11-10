@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.codingub.bitcupapp.common.Constants.DEF_HEIGHT
 import com.codingub.bitcupapp.databinding.ItemCuratedPhotoBinding
 import com.codingub.bitcupapp.domain.models.Photo
 import com.codingub.bitcupapp.utils.ImageUtil
@@ -40,10 +41,8 @@ class CuratedPhotoAdapter(
 
             internal fun binding(){
                 val photo = photos[bindingAdapterPosition]
-                val random = Random()
-                val photoSrc = if (random.nextBoolean()) photo.photoSrc.large else photo.photoSrc.medium
 
-                ImageUtil.load(Uri.parse(photoSrc)) {
+                ImageUtil.load(Uri.parse(photo.photoSrc.large)) {
                     binding.imgPhoto.apply {
                         setImageDrawable(it)
                     }

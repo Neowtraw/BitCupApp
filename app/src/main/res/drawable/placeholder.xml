@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/background_add" />
+    <item>
+        <bitmap
+            android:src="@drawable/placeholder_image"
+            android:tint="@color/placeholder"
+
+            android:gravity="center" />
+    </item>
+</layer-list>

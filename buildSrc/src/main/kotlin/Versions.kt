@@ -6,7 +6,7 @@ object Versions {
     const val hiltCompose = "1.0.0"
     const val hiltNavigation = "1.1.0-alpha01"
 
-    const val room = "2.6.0-rc01"
+    const val room = "2.6.0"
 
     const val coroutines = "1.7.3"
     const val viewModel = "2.6.2"

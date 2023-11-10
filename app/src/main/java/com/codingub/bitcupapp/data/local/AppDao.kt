@@ -8,8 +8,6 @@ import com.codingub.bitcupapp.data.local.models.BookmarkPhotoEntity
 import com.codingub.bitcupapp.data.local.models.CuratedPhotoEntity
 import com.codingub.bitcupapp.data.local.models.FeaturedCollectionEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.count
 
 @Dao
 interface AppDao {

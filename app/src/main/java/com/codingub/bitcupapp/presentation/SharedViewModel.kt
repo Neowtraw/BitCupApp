@@ -15,11 +15,8 @@ class SharedViewModel : ViewModel() {
     private val _photoId = MutableLiveData<Long>()
     val photoId : LiveData<Long> get() = _photoId
 
-    private val _isBookmarkLiveData : MutableLiveData<Boolean> = MutableLiveData()
-    val isBookmarkLiveData: LiveData<Boolean> get() = _isBookmarkLiveData
-
     fun setPhotoId(id: Long){
-
         _photoId.value = id
     }
+
 }

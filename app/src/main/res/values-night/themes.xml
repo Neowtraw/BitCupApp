@@ -12,8 +12,7 @@
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/contrast</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/app_icon</item>
-        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
         <item name="postSplashScreenTheme">@style/Base.Theme.BitCupApp</item>
     </style>
 </resources>

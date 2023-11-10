@@ -67,6 +67,7 @@ dependencies {
 
     implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
 
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
     hilt()
     base()
     gson()

@@ -22,19 +22,34 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgSearch"
-            android:layout_width="@dimen/search_image_size"
-            android:layout_height="@dimen/search_image_size"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/search"
+            android:tint="@color/contrast"
             android:layout_marginRight="12dp" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etSearch"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@null"
             android:hint="@string/search"
             android:textColor="@color/text_color"
             android:textColorHint="@color/add_text"
-            android:textSize="@dimen/main_text" />
+            android:textSize="@dimen/main_text"
+            android:inputType="text"
+            android:imeOptions="actionSearch"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgClear"
+            android:visibility="gone"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@drawable/search_clear"
+            android:tint="@color/search_cancel"
+            android:layout_marginStart="12dp"
+            android:layout_marginRight="12dp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -54,11 +69,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/Collections"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/main_padding"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/photoContainerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:visibility="gone"/>
+
 
     <include layout="@layout/layout_not_found"
         android:id="@+id/llNotFound"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/shimmer_home" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

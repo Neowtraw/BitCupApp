@@ -18,7 +18,7 @@ class UpdateCachedFeaturedCollections @Inject constructor(
 ) {
 
     suspend operator fun invoke(){
-        return repository.updateCachedFeaturedCollections()
+        return repository.clearCachedFeaturedCollections()
     }
 }
 
@@ -27,7 +27,7 @@ class UpdateCachedCuratedPhotos @Inject constructor(
 ) {
 
     suspend operator fun invoke(){
-        return repository.updateCachedCuratedPhotos()
+        return repository.clearCachedCuratedPhotos()
     }
 }
 

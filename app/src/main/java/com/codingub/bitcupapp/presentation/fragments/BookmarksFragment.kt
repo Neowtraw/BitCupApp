@@ -5,12 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.text.font.Typeface
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.codingub.bitcupapp.R
-import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentBookmarksBinding
 import com.codingub.bitcupapp.presentation.SharedViewModel
 import com.codingub.bitcupapp.presentation.adapters.BookmarkPhotoAdapter
@@ -19,7 +17,6 @@ import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ItemDecoration
 import com.codingub.bitcupapp.utils.Resource
-import com.codingub.bitcupapp.utils.extension.dp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +33,7 @@ class BookmarksFragment : BaseFragment() {
 
         customizeUI()
         customizeBookmarksView()
+        setupListeners()
 
         observeChanges()
         return binding.root
@@ -69,6 +67,12 @@ class BookmarksFragment : BaseFragment() {
         }
     }
 
+    private fun setupListeners(){
+        binding.llNotFound.tvExplore.setOnClickListener {
+            pushFragment(HomeFragment(), "home")
+        }
+    }
+
 
     override fun observeChanges() {
         with(vm) {
@@ -76,7 +80,7 @@ class BookmarksFragment : BaseFragment() {
                 bookmarksAdapter.photos = it ?: emptyList()
 
                 Log.d("test2","upd")
-                bookmarksAdapter.notifyDataSetChanged()
+                bookmarksAdapter.notifyItemRangeChanged(0, bookmarksAdapter.itemCount)
 
                 if(bookmarksAdapter.photos.isEmpty()) {
                     binding.llNotFound.llNotFound.visibility = View.VISIBLE
@@ -87,9 +91,9 @@ class BookmarksFragment : BaseFragment() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        vm.cancelCollection()
+    override fun onResume() {
+        super.onResume()
+        vm.getBookmarks()
     }
 
 

@@ -6,7 +6,6 @@
     <dimen name="search_round">50dp</dimen>
     <dimen name="back_round">12dp</dimen>
     <dimen name="search_padding">18dp</dimen>
-    <dimen name="search_image_size">16dp</dimen>
 
     <!-- tabs -->
     <dimen name="tab_width_padding">20dp</dimen>

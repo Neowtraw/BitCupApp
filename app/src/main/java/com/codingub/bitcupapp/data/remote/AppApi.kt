@@ -20,7 +20,7 @@ interface AppApi {
     suspend fun getCuratedPhotos(
        //pagination (optional)
         @Header("Authorization") key: String,
-        @Query("page") page: Int,
+        @Query("page") page: Long,
         @Query("per_page") perPage: Int
     ) : GetCuratedPhotosResponse
 

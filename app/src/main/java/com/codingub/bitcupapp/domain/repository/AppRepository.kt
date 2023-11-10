@@ -18,7 +18,7 @@ interface AppRepository {
     suspend fun searchPhotos(query: String) : ResultState<List<Photo>>
 
     fun initCacheUpdater()
-    suspend fun updateCachedFeaturedCollections()
-    suspend fun updateCachedCuratedPhotos()
+    suspend fun clearCachedFeaturedCollections()
+    suspend fun clearCachedCuratedPhotos()
 
 }

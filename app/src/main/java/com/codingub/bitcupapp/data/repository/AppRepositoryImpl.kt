@@ -9,7 +9,6 @@ import androidx.work.WorkManager
 import com.codingub.bitcupapp.common.Constants
 import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.data.local.datasource.LocalDataSource
-import com.codingub.bitcupapp.data.local.models.BookmarkPhotoEntity
 import com.codingub.bitcupapp.data.remote.datasource.RemoteDataSource
 import com.codingub.bitcupapp.data.utils.NetworkBoundResultState
 import com.codingub.bitcupapp.data.worker.CacheUpdateWorker
@@ -17,15 +16,8 @@ import com.codingub.bitcupapp.data.worker.util.WorkerConstants
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.domain.models.Photo
 import com.codingub.bitcupapp.domain.repository.AppRepository
-import com.codingub.bitcupapp.utils.extension.isEmptyOrNull
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -38,8 +30,6 @@ class AppRepositoryImpl @Inject constructor(
 
     private val workConstraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
-        .setRequiresStorageNotLow(true)
-        .setRequiresBatteryNotLow(true)
         .build()
 
     override fun getFeaturedCollections(): Flow<ResultState<List<FeaturedCollection>>> =
@@ -122,7 +112,7 @@ class AppRepositoryImpl @Inject constructor(
 
     override fun initCacheUpdater() {
         val updateWorkRequest = PeriodicWorkRequestBuilder<CacheUpdateWorker>(
-            Constants.UPDATE_INTERVAL, TimeUnit.HOURS
+            Constants.UPDATE_INTERVAL, TimeUnit.SECONDS
         )
             .setConstraints(workConstraints)
             .addTag(WorkerConstants.WORKER_TAG)
@@ -135,25 +125,25 @@ class AppRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun updateCachedFeaturedCollections() {
+    override suspend fun clearCachedFeaturedCollections() {
+
         try {
-            val collections = remoteDataSource.getFeaturedCollections()
-            localDataSource.insertFeaturedCollections(collections)
-            Log.e("updateCachedCollections", "Successfully")
+            localDataSource.clearCachedFeaturedCollections()
+            Log.e("clearCachedCollections", "Successfully")
         } catch (e: Exception) {
-            Log.e("updateCachedCollections", e.message.toString())
+            Log.e("clearCachedCollections", e.message.toString())
             throw e
         }
     }
 
-    override suspend fun updateCachedCuratedPhotos() {
+    override suspend fun clearCachedCuratedPhotos() {
         try {
-            val photos = remoteDataSource.getCuratedPhotos()
-            localDataSource.insertCuratedPhotos(photos)
-            Log.e("updateCachedPhotos", "Successfully")
+            localDataSource.clearCachedCuratedPhotos()
+            Log.e("clearCachedCuratedPhotos", "Successfully")
         } catch (e: Exception) {
-            Log.e("updateCachedPhotos", e.message.toString())
+            Log.e("clearCachedCuratedPhotos", e.message.toString())
             throw e
         }
+
     }
 }

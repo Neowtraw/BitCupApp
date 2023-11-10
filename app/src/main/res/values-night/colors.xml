@@ -6,4 +6,9 @@
     <color name="contrast">#BB1020</color>
     <color name="add_text">#B5B5B5</color>
     <color name="background_add">#393939</color>
+
+    <color name="placeholder">#B5B5B5</color>
+    <color name="shimmer">#868686</color>
+
+
 </resources>

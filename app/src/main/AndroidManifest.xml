@@ -30,7 +30,6 @@
                 tools:node="remove" />
         </provider>
         <activity
-            android:theme="@style/Base.Theme.BitCupApp"
             android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>

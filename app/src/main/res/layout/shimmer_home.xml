@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/main_padding"
+    android:paddingEnd="@dimen/main_padding"
+    android:paddingStart="@dimen/main_padding"
+    android:paddingTop="12dp"
+    tools:context=".presentation.fragments.HomeFragment">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        android:paddingBottom="@dimen/main_padding">
+
+        <TextView
+            android:id="@+id/TvElement1"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:background="@drawable/shimmer" />
+
+        <TextView
+            android:id="@+id/TvElement2"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="11dp"
+            android:layout_toEndOf="@id/TvElement1"
+            android:layout_weight="1"
+            android:background="@drawable/shimmer" />
+
+        <TextView
+            android:id="@+id/TvElement3"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="11dp"
+            android:layout_toEndOf="@id/TvElement2"
+            android:layout_weight="1"
+            android:background="@drawable/shimmer" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/Tv1"
+            android:layout_width="155dp"
+            android:layout_height="250dp"
+            android:background="@drawable/shimmer" />
+
+        <TextView
+            android:id="@+id/Tv2"
+            android:layout_width="155dp"
+            android:layout_height="170dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@id/Tv1"
+            android:background="@drawable/shimmer" />
+
+        <TextView
+            android:id="@+id/Tv3"
+            android:layout_width="155dp"
+            android:layout_height="280dp"
+            android:layout_below="@id/Tv2"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_toEndOf="@id/Tv4"
+            android:background="@drawable/shimmer" />
+
+        <TextView
+            android:id="@+id/Tv4"
+            android:layout_width="155dp"
+            android:layout_height="120dp"
+            android:layout_below="@id/Tv1"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shimmer" />
+
+        <TextView
+            android:id="@+id/Tv5"
+            android:layout_width="155dp"
+            android:layout_height="240dp"
+            android:layout_below="@id/Tv4"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shimmer" />
+
+        <TextView
+            android:id="@+id/Tv6"
+            android:layout_width="155dp"
+            android:layout_height="240dp"
+            android:layout_below="@id/Tv3"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_toEndOf="@id/Tv5"
+            android:background="@drawable/shimmer" />
+
+    </RelativeLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>
+

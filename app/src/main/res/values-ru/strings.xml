@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="exit_app_string">Нажмите еще раз, чтобы выйти</string>
+
+    <string name="search">Поиск</string>
+
+    <string name="download">Установить</string>
+    <string name="image_downloaded">Успешно установлено</string>
+
+    <string name="try_again">Попробовать еще раз</string>
+    <string name="explore">Просмотреть</string>
+    <string name="no_results_found">Результаты не найдены</string>
+    <string name="no_bookmarks_found">Вы еще ничего не сохранили</string>
+    <string name="bookmarks">Закладки</string>
+    <string name="no_image_found">Изображение не найдено</string>
+
+    <string name="network_error">Нет соединения</string>
+
+
+</resources>
