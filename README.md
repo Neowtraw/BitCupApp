@@ -6,17 +6,17 @@ Pexels App is an application that provides access to an extensive collection of 
 ## **HomeFragment**
 
 <p align="center">
-<img  src="./images_readme/HomeFragment.jpg" width="80%">
+<img  src="./images_readme/HomeFragment.jpg" width="30%">
 </p>
 
 ## **DetailsFragment**
 
 <p align="center">
-<img  src="./images_readme/DetailsFragment.jpg" width="80%">
+<img  src="./images_readme/DetailsFragment.jpg" width="30%">
 </p>
 
 ## **BookmarksFragment**
 
 <p align="center">
-<img  src="./images_readme/BookmarksFragment.jpg" width="80%">
+<img  src="./images_readme/BookmarksFragment.jpg" width="30%">
 </p>
