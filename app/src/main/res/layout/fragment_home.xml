@@ -64,10 +64,8 @@
         android:visibility="gone"
         app:indicatorColor="@color/contrast" />
 
-    <include layout="@layout/layout_network_error"
-        android:id="@+id/llNetwork"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
+
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/Collections"
@@ -86,6 +84,11 @@
         android:layout_marginStart="18dp"
         android:layout_marginEnd="18dp"
         android:visibility="gone"/>
+
+    <include layout="@layout/layout_network_error"
+        android:id="@+id/llNetwork"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 
     <include layout="@layout/layout_not_found"

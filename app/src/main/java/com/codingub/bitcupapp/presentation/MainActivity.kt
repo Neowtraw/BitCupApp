@@ -3,7 +3,6 @@ package com.codingub.bitcupapp.presentation
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -13,7 +12,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.FragmentTransaction
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.databinding.ActivityMainBinding
 import com.codingub.bitcupapp.presentation.fragments.BookmarksFragment
@@ -24,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
 
     private val vm: MainActivityViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
@@ -80,13 +77,13 @@ class MainActivity : AppCompatActivity() {
     private fun createBottomBar() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-
                 R.id.home_tab -> pushFragment(HomeFragment(), "home")
                 R.id.bookmark_tab -> pushFragment(BookmarksFragment(), "bookmark")
                 else -> {}
             }
             true
         }
+
     }
 
     private fun hideSystemUI() {

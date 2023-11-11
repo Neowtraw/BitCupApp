@@ -70,8 +70,19 @@
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/item_btn_round_background">
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/download"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:paddingLeft="65dp"
+                android:paddingTop="15dp"
+                android:paddingRight="37dp"
+                android:text="@string/download"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/main_text"
+                android:background="@drawable/ripple_corner"/>
 
             <FrameLayout
                 android:layout_width="48dp"
@@ -84,17 +95,6 @@
                     android:layout_gravity="center"
                     android:src="@drawable/download" />
             </FrameLayout>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/download"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:paddingLeft="65dp"
-                android:paddingTop="15dp"
-                android:paddingRight="37dp"
-                android:text="@string/download"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/main_text" />
         </FrameLayout>
 
         <View

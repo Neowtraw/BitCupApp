@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/Tv1"
+        android:layout_width="155dp"
+        android:layout_height="250dp"
+        android:background="@drawable/shimmer" />
+
+    <TextView
+        android:id="@+id/Tv2"
+        android:layout_width="155dp"
+        android:layout_height="170dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/Tv1"
+        android:background="@drawable/shimmer" />
+
+    <TextView
+        android:id="@+id/Tv3"
+        android:layout_width="155dp"
+        android:layout_height="280dp"
+        android:layout_below="@id/Tv2"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@id/Tv4"
+        android:background="@drawable/shimmer" />
+
+    <TextView
+        android:id="@+id/Tv4"
+        android:layout_width="155dp"
+        android:layout_height="120dp"
+        android:layout_below="@id/Tv1"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shimmer" />
+
+    <TextView
+        android:id="@+id/Tv5"
+        android:layout_width="155dp"
+        android:layout_height="240dp"
+        android:layout_below="@id/Tv4"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shimmer" />
+
+    <TextView
+        android:id="@+id/Tv6"
+        android:layout_width="155dp"
+        android:layout_height="240dp"
+        android:layout_below="@id/Tv3"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@id/Tv5"
+        android:background="@drawable/shimmer" />
+
+</RelativeLayout>

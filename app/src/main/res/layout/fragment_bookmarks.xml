@@ -20,20 +20,20 @@
         android:id="@+id/rvBookmarksView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginEnd="@dimen/main_padding"
-        android:layout_marginTop="29dp"
         android:layout_marginStart="@dimen/main_padding"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="@dimen/main_padding"
         android:background="@color/background"
-        app:layout_constraintTop_toBottomOf="@id/tvBookmarks"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvBookmarks" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/background_add"
-        android:background="@color/background_add"
         android:layout_marginTop="12dp"
+        android:background="@color/background_add"
+        android:backgroundTint="@color/background_add"
         android:indeterminate="true"
         android:visibility="gone"
         app:indicatorColor="@color/contrast"
@@ -65,9 +65,23 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <include layout="@layout/layout_not_found"
+    <include
         android:id="@+id/llNotFound"
+        layout="@layout/layout_not_found"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/main_padding"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="@dimen/main_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvBookmarks">
+
+        <include layout="@layout/shimmer_curated_photos" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

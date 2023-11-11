@@ -36,6 +36,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         initCacheUpdater()
+
     }
 
     private fun getCollections(){

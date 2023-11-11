@@ -9,6 +9,7 @@
 
     <color name="placeholder">#B5B5B5</color>
     <color name="shimmer">#868686</color>
+    <color name="ripple">#868686</color>
 
 
 </resources>

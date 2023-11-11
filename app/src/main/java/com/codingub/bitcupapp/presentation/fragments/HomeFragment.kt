@@ -5,6 +5,7 @@ import android.graphics.Outline
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +16,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentHomeBinding
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
+import com.codingub.bitcupapp.presentation.MainActivityViewModel
 import com.codingub.bitcupapp.presentation.SharedViewModel
 import com.codingub.bitcupapp.presentation.adapters.CuratedPhotoAdapter
 import com.codingub.bitcupapp.presentation.custom.FeaturedView
@@ -38,12 +41,14 @@ import kotlinx.coroutines.launch
 class HomeFragment : BaseFragment() {
 
     private val vm: HomeViewModel by viewModels()
+    private val activityVm: MainActivityViewModel by activityViewModels()
     private val model: SharedViewModel by activityViewModels()
     private lateinit var binding: FragmentHomeBinding
 
-    private lateinit var photoAdapter: CuratedPhotoAdapter
     private lateinit var featuredCollections: List<FeaturedCollection>
     private val tabs: MutableList<TabLayout.Tab> = mutableListOf()
+    private lateinit var photoAdapter: CuratedPhotoAdapter
+
 
     override fun createView(inf: LayoutInflater, con: ViewGroup?, state: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inf, con, false)
@@ -51,7 +56,7 @@ class HomeFragment : BaseFragment() {
         //ui
         customizeUI()
         createTabLayout()
-        createPhotoView()
+        createPhotoContainerView()
 
         return binding.root
     }
@@ -60,10 +65,13 @@ class HomeFragment : BaseFragment() {
         observeChanges()
         setupListeners()
 
-        vm.updateData()
-        vm.updateLastRequestedAction {
-            vm.updateData()
-        }
+        vm.lastRequestedAction?.invoke() ?: vm.updateData()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        vm.lastRequestedAction?.invoke() ?: vm.updateData()
     }
 
     private fun customizeUI() {
@@ -95,7 +103,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun createPhotoView() {
+    private fun createPhotoContainerView() {
         binding.photoContainerView.apply {
             setHasFixedSize(true)
             layoutManager = StaggeredGridLayoutManager(
@@ -109,14 +117,14 @@ class HomeFragment : BaseFragment() {
             adapter = photoAdapter
             addItemDecoration(ItemDecoration.createItemDecoration(8))
         }
-
     }
 
     private fun setupListeners() {
 
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                Unit
 
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
@@ -171,15 +179,16 @@ class HomeFragment : BaseFragment() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 val index = tabs.indexOf(tab)
                 if (index == -1) return
-
                 val categoryView = tab.customView as FeaturedView
                 categoryView.setChecked(true, animated = true)
+
 
                 binding.etSearch.setText(categoryView.text)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
                 (tab.customView as FeaturedView).setChecked(false, animated = true)
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) = Unit
@@ -227,16 +236,12 @@ class HomeFragment : BaseFragment() {
                             }
 
                         }
-                        showSuccess()
 
+                        showSuccess()
                     }
 
                     is ResultState.Error -> {
                         showError()
-
-                        if (collection.data.isNullOrEmpty()) {
-                            binding.llNetwork.llNetwork.visibility = View.VISIBLE
-                        }
 
                         Toast.makeText(
                             requireContext(),
@@ -278,10 +283,6 @@ class HomeFragment : BaseFragment() {
 
     }
 
-    /*
-        Additional
-     */
-
     private fun showSuccess() {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(500)
@@ -299,6 +300,7 @@ class HomeFragment : BaseFragment() {
             ) {
                 binding.llNotFound.llNotFound.visibility = View.VISIBLE
             }
+            showScreen()
         }
     }
 
@@ -311,15 +313,26 @@ class HomeFragment : BaseFragment() {
         binding.photoContainerView.visibility = View.GONE
         binding.Collections.visibility = View.GONE
         binding.llNotFound.llNotFound.visibility = View.GONE
+
     }
 
     private fun showError() {
+        if (!vm.getCollectionsLiveData().value?.data.isNullOrEmpty()) {
+            Log.d("testikk", "succ")
+            binding.Collections.visibility = View.VISIBLE
+        }
+
         binding.progressBar.visibility = View.VISIBLE
+
 
         binding.shimmer.visibility = View.GONE
         binding.llNotFound.llNotFound.visibility = View.GONE
         binding.photoContainerView.visibility = View.GONE
-        binding.Collections.visibility = View.GONE
+        showScreen()
+    }
+
+    private fun showScreen() {
+        if (activityVm.isLoading.value) activityVm.isLoading.value = false
     }
 
 }

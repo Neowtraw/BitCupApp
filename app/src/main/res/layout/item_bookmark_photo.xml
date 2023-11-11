@@ -10,21 +10,21 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/image_corner">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imgPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:src="@drawable/placeholder"
-            android:adjustViewBounds="true"
-            android:layout_gravity="center"
-            />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvPhotographer"
