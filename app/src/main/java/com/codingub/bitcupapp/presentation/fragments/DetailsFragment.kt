@@ -5,6 +5,7 @@ import android.graphics.PointF
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -78,15 +79,17 @@ class DetailsFragment : BaseFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupListeners() {
-        binding.Photo.imgPhoto.setOnTouchListener {_, event ->
+        binding.Photo.imgPhoto.setOnTouchListener { _, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     initialPointer1 = PointF(event.getX(0), event.getY(0))
                     initialPointer2 = null
                 }
+
                 MotionEvent.ACTION_POINTER_DOWN -> {
                     initialPointer2 = PointF(event.getX(1), event.getY(1))
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     if (event.pointerCount > 1 && initialPointer1 != null && initialPointer2 != null) {
                         val currentPointer1 = PointF(event.getX(0), event.getY(0))
@@ -107,6 +110,7 @@ class DetailsFragment : BaseFragment() {
                         binding.Photo.imgPhoto.scaleY = scaleFactor
                     }
                 }
+
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP, MotionEvent.ACTION_CANCEL -> {
                     initialPointer1 = null
                     initialPointer2 = null
@@ -178,15 +182,17 @@ class DetailsFragment : BaseFragment() {
                 }
             }
             isBookmarkLiveData.observe(viewLifecycleOwner) {
-                val itemBackground = binding.bookmark.background as GradientDrawable
                 if (it) {
-                    itemBackground.setColor(Resource.color(R.color.background_bookmark_add))
-                    binding.imgBookmark.setColorFilter(Resource.color(R.color.bookmark))
-                } else {
-                    itemBackground.setColor(Resource.color(R.color.background_add))
-                    binding.imgBookmark.clearColorFilter()
+                    binding.imgBookmark.apply {
+                        setImageResource(R.drawable.bookmark_checked)
+                    setColorFilter(Resource.color(R.color.contrast))}
+                    return@observe
                 }
-                return@observe
+                binding.imgBookmark.apply {
+                    setImageResource(R.drawable.bookmark_unchecked)
+                    setColorFilter(Resource.color(R.color.text_color))
+                }
+
             }
         }
     }

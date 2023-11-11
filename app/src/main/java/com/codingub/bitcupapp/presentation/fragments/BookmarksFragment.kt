@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.codingub.bitcupapp.R
+import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentBookmarksBinding
 import com.codingub.bitcupapp.presentation.SharedViewModel
 import com.codingub.bitcupapp.presentation.adapters.BookmarkPhotoAdapter
@@ -77,16 +78,29 @@ class BookmarksFragment : BaseFragment() {
     override fun observeChanges() {
         with(vm) {
             getBookmarksLiveData().observe(viewLifecycleOwner) {
-                bookmarksAdapter.photos = it ?: emptyList()
 
-                Log.d("test2","upd")
-                bookmarksAdapter.notifyItemRangeChanged(0, bookmarksAdapter.itemCount)
+                when(it){
+                    is ResultState.Success -> {
+                        bookmarksAdapter.photos = it.value
+                        bookmarksAdapter.notifyItemRangeChanged(0, bookmarksAdapter.itemCount)
 
-                if(bookmarksAdapter.photos.isEmpty()) {
-                    binding.llNotFound.llNotFound.visibility = View.VISIBLE
-                    return@observe
+                        binding.shimmer.visibility = View.GONE
+                        binding.rvBookmarksView.visibility = View.VISIBLE
+
+                        if(bookmarksAdapter.photos.isEmpty()) {
+                            binding.llNotFound.llNotFound.visibility = View.VISIBLE
+                            return@observe
+                        }
+                    }
+                    is ResultState.Loading -> {
+                        binding.rvBookmarksView.visibility = View.GONE
+                        binding.shimmer.visibility = View.VISIBLE
+                    }
+                    else -> {}
                 }
-                binding.rvBookmarksView.visibility = View.VISIBLE
+
+
+
             }
         }
     }

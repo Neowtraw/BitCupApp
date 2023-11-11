@@ -22,13 +22,12 @@ class CacheUpdateWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            Log.e("yoy", "He is WoRKING")
+            Log.e("CacheUpdateWorker", "Success")
 
             repository.clearCachedCuratedPhotos()
             repository.clearCachedFeaturedCollections()
             Result.success(workDataOf(WorkerConstants.CACHE_UPDATE_KEY to true))
         }catch (ex: Exception) {
-            Log.e("CacheUpdateWorker", ex.message.toString())
             Result.failure(workDataOf(WorkerConstants.CACHE_UPDATE_KEY to false))
         }
     }

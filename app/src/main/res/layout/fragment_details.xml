@@ -76,13 +76,13 @@
                 android:id="@+id/download"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
+                android:background="@drawable/ripple_corner"
                 android:paddingLeft="65dp"
                 android:paddingTop="15dp"
                 android:paddingRight="37dp"
                 android:text="@string/download"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/main_text"
-                android:background="@drawable/ripple_corner"/>
+                android:textSize="@dimen/main_text" />
 
             <FrameLayout
                 android:layout_width="48dp"
@@ -114,9 +114,7 @@
                 android:layout_width="20dp"
                 android:layout_height="18dp"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"
-                android:src="@drawable/bookmark_unchecked"
-                android:tint="@color/text_color" />
+                android:scaleType="fitCenter" />
         </FrameLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 

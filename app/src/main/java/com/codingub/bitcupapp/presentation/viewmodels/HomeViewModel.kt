@@ -19,9 +19,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getFeaturedCollections: GetFeaturedCollections,
     private val getLastCuratedPhotos: GetLastCuratedPhotos,
-    private val searchPhotos: SearchPhotos,
-    initCacheUpdater: InitCacheUpdater
-) : ViewModel(){
+    private val searchPhotos: SearchPhotos) : ViewModel(){
 
 
     private val collectionsLiveData: MutableLiveData<ResultState<List<FeaturedCollection>>> = MutableLiveData(ResultState.Loading())
@@ -33,11 +31,6 @@ class HomeViewModel @Inject constructor(
     private fun setPhotosLiveData(value: ResultState<List<Photo>>) { photosLiveData.value = value }
 
     var lastRequestedAction: (() -> Unit)? = null
-
-    init {
-        initCacheUpdater()
-
-    }
 
     private fun getCollections(){
         viewModelScope.launch {

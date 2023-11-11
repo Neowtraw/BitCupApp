@@ -243,6 +243,10 @@ class HomeFragment : BaseFragment() {
                     is ResultState.Error -> {
                         showError()
 
+                        if (collection.data.isNullOrEmpty()) {
+                            binding.llNetwork.llNetwork.visibility = View.VISIBLE
+                        }
+
                         Toast.makeText(
                             requireContext(),
                             collection.error?.message.toString(),
@@ -318,7 +322,6 @@ class HomeFragment : BaseFragment() {
 
     private fun showError() {
         if (!vm.getCollectionsLiveData().value?.data.isNullOrEmpty()) {
-            Log.d("testikk", "succ")
             binding.Collections.visibility = View.VISIBLE
         }
 
