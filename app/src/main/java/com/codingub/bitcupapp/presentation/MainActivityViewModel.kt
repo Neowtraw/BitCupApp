@@ -12,7 +12,7 @@ class MainActivityViewModel @Inject constructor(
 ): ViewModel() {
 
     init {
-        val res = initCacheUpdater()
+        initCacheUpdater()
     }
 
     val isLoading = MutableStateFlow(true)

@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.codingub.bitcupapp.common.Constants.DEF_HEIGHT
 import com.codingub.bitcupapp.databinding.ItemCuratedPhotoBinding
 import com.codingub.bitcupapp.domain.models.Photo
 import com.codingub.bitcupapp.utils.ImageUtil
-import java.util.Random
 
 class CuratedPhotoAdapter(
     private inline val onPhotoSelected: (Photo) -> Unit
@@ -39,21 +37,21 @@ class CuratedPhotoAdapter(
     inner class ViewHolder(private val binding: ItemCuratedPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-            internal fun binding(){
-                val photo = photos[bindingAdapterPosition]
+        internal fun binding() {
+            val photo = photos[bindingAdapterPosition]
 
-                ImageUtil.load(Uri.parse(photo.photoSrc.large)) {
-                    binding.imgPhoto.apply {
-                        setImageDrawable(it)
-                    }
+            ImageUtil.load(Uri.parse(photo.photoSrc.large)) {
+                binding.imgPhoto.apply {
+                    setImageDrawable(it)
                 }
             }
+        }
 
-            init {
-                binding.root.setOnClickListener {
-                    onPhotoSelected(photos[bindingAdapterPosition])
-                }
+        init {
+            binding.root.setOnClickListener {
+                onPhotoSelected(photos[bindingAdapterPosition])
             }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -65,5 +63,6 @@ class CuratedPhotoAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding()
     }
+
     override fun getItemCount(): Int = photos.size
 }

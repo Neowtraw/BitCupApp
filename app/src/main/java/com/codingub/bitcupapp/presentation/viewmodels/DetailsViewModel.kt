@@ -1,6 +1,5 @@
 package com.codingub.bitcupapp.presentation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,7 +26,7 @@ class DetailsViewModel @Inject constructor(
     private val _photo: MutableLiveData<ResultState<Photo>> = MutableLiveData()
     val photo: LiveData<ResultState<Photo>> get() = _photo
 
-    private val _isBookmarkLiveData : MutableLiveData<Boolean> = MutableLiveData()
+    private val _isBookmarkLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val isBookmarkLiveData: LiveData<Boolean> get() = _isBookmarkLiveData
 
     fun getPhotoInfo(id: Long) {
@@ -50,7 +49,7 @@ class DetailsViewModel @Inject constructor(
     fun updateBookmark() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = updateBookmarkPhoto(_photo.value!!.data!!)
+            updateBookmarkPhoto(_photo.value!!.data!!)
             withContext(Dispatchers.Main) {
                 isBookmark()
             }

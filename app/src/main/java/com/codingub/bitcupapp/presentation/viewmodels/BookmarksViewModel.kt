@@ -4,15 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
-
 import com.codingub.bitcupapp.domain.models.Photo
 import com.codingub.bitcupapp.domain.use_cases.GetBookmarkPhotos
-import com.codingub.bitcupapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -39,9 +35,4 @@ class BookmarksViewModel @Inject constructor(
             }
         }
     }
-
-    fun cancelCollection() {
-        viewModelScope.coroutineContext.cancel()
-    }
-
 }

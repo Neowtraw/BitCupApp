@@ -8,7 +8,7 @@ import javax.inject.Inject
 class IsBookmarkPhoto @Inject constructor(
     private val repository: AppRepository
 ) {
-    suspend operator fun invoke(id: Long) : Boolean{
+    suspend operator fun invoke(id: Long): Boolean {
         return repository.getBookmarkPhoto(id)
     }
 }
@@ -16,7 +16,7 @@ class IsBookmarkPhoto @Inject constructor(
 class UpdateBookmarkPhoto @Inject constructor(
     private val repository: AppRepository
 ) {
-    suspend operator fun invoke(photo: Photo){
+    suspend operator fun invoke(photo: Photo) {
         return repository.updateBookmarkPhoto(photo)
     }
 }
@@ -26,7 +26,7 @@ class GetBookmarkPhotos @Inject constructor(
     private val repository: AppRepository
 ) {
 
-    operator fun invoke() : Flow<List<Photo>> {
+    operator fun invoke(): Flow<List<Photo>> {
         return repository.getBookmarkPhotos()
     }
 }

@@ -7,12 +7,11 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
-
 class GetLastCuratedPhotos @Inject constructor(
     private val repository: AppRepository
 ) {
 
-    operator fun invoke() : Flow<ResultState<List<Photo>>> {
+    operator fun invoke(): Flow<ResultState<List<Photo>>> {
         return repository.getLastCuratedPhotos()
     }
 }
@@ -21,7 +20,7 @@ class GetPhoto @Inject constructor(
     private val repository: AppRepository
 ) {
 
-    suspend operator fun invoke(id: Long) : ResultState<Photo> {
+    suspend operator fun invoke(id: Long): ResultState<Photo> {
         return repository.getPhoto(id = id)
     }
 }
@@ -30,7 +29,7 @@ class SearchPhotos @Inject constructor(
     private val repository: AppRepository
 ) {
 
-    suspend operator fun invoke(query: String) : ResultState<List<Photo>> {
+    suspend operator fun invoke(query: String): ResultState<List<Photo>> {
         return repository.searchPhotos(query)
     }
 }

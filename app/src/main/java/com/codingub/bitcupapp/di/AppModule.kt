@@ -3,12 +3,6 @@ package com.codingub.bitcupapp.di
 import com.codingub.bitcupapp.App
 import com.codingub.bitcupapp.BuildConfig
 import com.codingub.bitcupapp.common.Constants
-import com.codingub.bitcupapp.common.Constants.Injection.BUILD_VERSION_CODE
-import com.codingub.bitcupapp.common.Constants.Injection.BUILD_VERSION_NAME
-import com.codingub.bitcupapp.common.Constants.Injection.IS_DEBUG
-import com.codingub.bitcupapp.data.local.AppDatabase
-import com.codingub.bitcupapp.domain.repository.AppRepository
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

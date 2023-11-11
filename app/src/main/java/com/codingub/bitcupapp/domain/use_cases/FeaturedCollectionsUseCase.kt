@@ -11,7 +11,7 @@ class GetFeaturedCollections @Inject constructor(
     private val repository: AppRepository
 ) {
 
-    operator fun invoke() :  Flow<ResultState<List<FeaturedCollection>>> {
+    operator fun invoke(): Flow<ResultState<List<FeaturedCollection>>> {
         return repository.getFeaturedCollections()
     }
 }

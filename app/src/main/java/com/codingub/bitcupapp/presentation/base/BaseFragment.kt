@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import com.codingub.bitcupapp.presentation.MainActivity
 
 /**
- * Base class for all activities
+ * Base class for all fragments
  */
-abstract class BaseFragment : Fragment(){
+abstract class BaseFragment : Fragment() {
 
     private val mainActivity: MainActivity get() = MainActivity.getInstance()
     override fun getContext(): Context = mainActivity

@@ -39,7 +39,8 @@ class ConnectionManager @Inject constructor(@ApplicationContext private val cont
             }
         }
 
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager.requestNetwork(networkRequest, networkCallback)
     }
 }

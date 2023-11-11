@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/main_padding"
-    android:paddingEnd="@dimen/main_padding"
     android:paddingStart="@dimen/main_padding"
     android:paddingTop="12dp"
+    android:paddingEnd="@dimen/main_padding"
+    android:paddingBottom="@dimen/main_padding"
     tools:context=".presentation.fragments.HomeFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -44,7 +44,7 @@
             android:background="@drawable/shimmer" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-    
-   <include layout="@layout/shimmer_curated_photos"/>
+
+    <include layout="@layout/shimmer_curated_photos" />
 </androidx.appcompat.widget.LinearLayoutCompat>
 

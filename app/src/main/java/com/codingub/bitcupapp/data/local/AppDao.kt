@@ -28,13 +28,13 @@ interface AppDao {
     suspend fun getBookmarkPhoto(id: Long): BookmarkPhotoEntity?
 
     @Query("SELECT * FROM FeaturedCollection")
-    fun getFeaturedCollections() : Flow<List<FeaturedCollectionEntity>>
+    fun getFeaturedCollections(): Flow<List<FeaturedCollectionEntity>>
 
     @Query("SELECT * FROM CuratedPhoto")
-    fun getLastCuratedPhotos() : Flow<List<CuratedPhotoEntity>>
+    fun getLastCuratedPhotos(): Flow<List<CuratedPhotoEntity>>
 
     @Query("SELECT * FROM CuratedPhoto WHERE id = :id")
-    fun getPhoto(id: Long) : Flow<CuratedPhotoEntity>
+    fun getPhoto(id: Long): Flow<CuratedPhotoEntity>
 
     @Query("DELETE FROM featuredcollection")
     suspend fun deleteAllFeaturedCollections()

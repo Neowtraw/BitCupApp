@@ -10,11 +10,8 @@ import com.codingub.bitcupapp.data.mappers.toFeaturedCollectionEntity
 import com.codingub.bitcupapp.data.mappers.toPhoto
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.domain.models.Photo
-import com.codingub.bitcupapp.utils.extension.isEmptyOrNull
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.take
 import javax.inject.Inject
 
 class LocalDataSourceImpl @Inject constructor(
@@ -40,14 +37,15 @@ class LocalDataSourceImpl @Inject constructor(
         return dao.getPhoto(id).map { it.toPhoto() }
     }
 
-    override fun getBookmarkPhotos() : Flow<List<Photo>> {
+    override fun getBookmarkPhotos(): Flow<List<Photo>> {
         return dao.getBookmarkPhotos().map {
             it.map { collection -> collection.toPhoto() }
         }
     }
 
     override fun getFeaturedCollections(): Flow<List<FeaturedCollection>> {
-        return dao.getFeaturedCollections().map { it.map { collection -> collection.toFeatureCollection() } }
+        return dao.getFeaturedCollections()
+            .map { it.map { collection -> collection.toFeatureCollection() } }
     }
 
     override fun getLastCuratedPhotos(): Flow<List<Photo>> {

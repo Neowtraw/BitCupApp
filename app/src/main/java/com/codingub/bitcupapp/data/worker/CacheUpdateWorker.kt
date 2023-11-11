@@ -10,9 +10,10 @@ import com.codingub.bitcupapp.data.worker.util.WorkerConstants
 import com.codingub.bitcupapp.domain.repository.AppRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
+/**
+ * WorkManager for periodic cleansing curated photos and featured collections from room
+ */
 @HiltWorker
 class CacheUpdateWorker @AssistedInject constructor(
     @Assisted private val context: Context,
@@ -27,7 +28,7 @@ class CacheUpdateWorker @AssistedInject constructor(
             repository.clearCachedCuratedPhotos()
             repository.clearCachedFeaturedCollections()
             Result.success(workDataOf(WorkerConstants.CACHE_UPDATE_KEY to true))
-        }catch (ex: Exception) {
+        } catch (ex: Exception) {
             Result.failure(workDataOf(WorkerConstants.CACHE_UPDATE_KEY to false))
         }
     }

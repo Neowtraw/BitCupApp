@@ -1,18 +1,16 @@
 package com.codingub.bitcupapp.data.remote.datasource
 
-import android.util.Log
 import com.codingub.bitcupapp.data.mappers.toFeatureCollection
 import com.codingub.bitcupapp.data.mappers.toPhoto
 import com.codingub.bitcupapp.data.prefs.AuthConfig
 import com.codingub.bitcupapp.data.remote.AppApi
-import com.codingub.bitcupapp.data.utils.SrcType
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.domain.models.Photo
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
     private val api: AppApi
-) : RemoteDataSource{
+) : RemoteDataSource {
 
     override suspend fun getCuratedPhotos(): List<Photo> {
         val curatedPhotos = api.getCuratedPhotos(

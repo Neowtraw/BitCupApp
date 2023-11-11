@@ -9,11 +9,11 @@ import com.codingub.bitcupapp.data.local.models.FeaturedCollectionEntity
 
 
 @Database(
-entities = [FeaturedCollectionEntity::class, CuratedPhotoEntity::class, BookmarkPhotoEntity::class],
+    entities = [FeaturedCollectionEntity::class, CuratedPhotoEntity::class, BookmarkPhotoEntity::class],
     version = 4
 )
 @TypeConverters(TypeConverter::class)
-abstract class AppDatabase : RoomDatabase(){
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun appDao(): AppDao
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Pexels Art</string>
+    <string name="app_name" translatable="false">Pexels App</string>
     <string name="exit_app_string">Click again to exit</string>
 
     <string name="home" translatable="false">home</string>

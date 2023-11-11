@@ -1,7 +1,6 @@
 package com.codingub.bitcupapp.data.repository
 
 import android.util.Log
-import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -26,8 +25,6 @@ class AppRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val workManager: WorkManager
 ) : AppRepository {
-
-    private val workConstraints = Constraints.Builder().build()
 
     override fun getFeaturedCollections(): Flow<ResultState<List<FeaturedCollection>>> =
         NetworkBoundResultState(
@@ -109,7 +106,7 @@ class AppRepositoryImpl @Inject constructor(
 
     override fun initCacheUpdater() {
         val updateWorkRequest = PeriodicWorkRequestBuilder<CacheUpdateWorker>(
-            Constants.UPDATE_INTERVAL, TimeUnit.MINUTES
+            Constants.UPDATE_INTERVAL, TimeUnit.HOURS
         )
             .addTag(WorkerConstants.WORKER_TAG)
             .build()

@@ -2,10 +2,8 @@ package com.codingub.bitcupapp.presentation.fragments
 
 import android.annotation.SuppressLint
 import android.graphics.PointF
-import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -185,7 +183,8 @@ class DetailsFragment : BaseFragment() {
                 if (it) {
                     binding.imgBookmark.apply {
                         setImageResource(R.drawable.bookmark_checked)
-                    setColorFilter(Resource.color(R.color.contrast))}
+                        setColorFilter(Resource.color(R.color.contrast))
+                    }
                     return@observe
                 }
                 binding.imgBookmark.apply {

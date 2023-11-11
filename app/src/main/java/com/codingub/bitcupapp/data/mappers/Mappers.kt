@@ -79,13 +79,13 @@ fun Photo.toCuratedPhotoEntity() = CuratedPhotoEntity(
 )
 
 fun FeaturedCollection.toFeaturedCollectionEntity() = FeaturedCollectionEntity(
-        id = id,
-        title = title,
-        description = description,
-        collectionPrivate = collectionPrivate,
-        mediaCount = mediaCount,
-        photosCount = photosCount,
-        videoCount = photosCount,
+    id = id,
+    title = title,
+    description = description,
+    collectionPrivate = collectionPrivate,
+    mediaCount = mediaCount,
+    photosCount = photosCount,
+    videoCount = photosCount,
 )
 
 /**

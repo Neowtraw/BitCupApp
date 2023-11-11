@@ -33,6 +33,7 @@ inline fun <ResultType, RequestType> NetworkBoundResultState(
                 query().map { ResultState.Error(throwable, it) }
             }
         }
+
         else -> {
             query().map { ResultState.Success(it) }
         }

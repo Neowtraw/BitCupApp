@@ -9,7 +9,7 @@ object TypeConverter {
 
     @TypeConverter
     @JvmStatic
-    fun srcTypeToString(type: SrcType): String{
+    fun srcTypeToString(type: SrcType): String {
         return Gson().toJson(type)
     }
 

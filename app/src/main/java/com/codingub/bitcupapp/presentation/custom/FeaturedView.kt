@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.text.TextUtils
 import android.view.Gravity
+import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
@@ -15,14 +16,18 @@ import com.codingub.bitcupapp.utils.extension.asFloat
 import com.codingub.bitcupapp.utils.extension.dp
 import com.codingub.bitcupapp.utils.extension.mixWith
 
+/**
+ * Only used for custom tabs in `HomeFragment`
+ */
 @SuppressLint("ViewConstructor")
 class FeaturedView(
     context: Context,
     collection: FeaturedCollection
 ) : AppCompatTextView(context) {
 
-    var isChecked: Boolean = false
-        private set
+    private var isChecked: Boolean = false
+
+    @Keep
     private var checkProgress: Float = isChecked.asFloat()
         set(value) {
             field = value
@@ -51,6 +56,7 @@ class FeaturedView(
         checkProgress = isChecked.asFloat()
     }
 
+    @Keep
     fun setChecked(checked: Boolean, animated: Boolean) {
         //  typeface = if (checked) Font.SEMIBOLD else Font.REGULAR
 

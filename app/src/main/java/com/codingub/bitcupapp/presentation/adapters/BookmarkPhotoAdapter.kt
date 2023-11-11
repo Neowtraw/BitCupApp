@@ -7,11 +7,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.codingub.bitcupapp.databinding.ItemBookmarkPhotoBinding
-import com.codingub.bitcupapp.databinding.ItemCuratedPhotoBinding
 import com.codingub.bitcupapp.domain.models.Photo
 import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ImageUtil
-import java.util.Random
 
 class BookmarkPhotoAdapter(
     private inline val onPhotoSelected: (Photo) -> Unit

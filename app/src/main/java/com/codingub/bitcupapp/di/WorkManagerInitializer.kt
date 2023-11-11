@@ -37,7 +37,8 @@ object WorkManagerInitializer : Initializer<WorkManager> {
     private fun getWorkerFactory(appContext: Context): HiltWorkerFactory {
         val workManagerEntryPoint = EntryPointAccessors.fromApplication(
             appContext,
-            WorkManagerInitializerEntryPoint::class.java)
+            WorkManagerInitializerEntryPoint::class.java
+        )
         return workManagerEntryPoint.hiltWorkerFactory()
     }
 
