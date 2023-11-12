@@ -180,18 +180,13 @@ class DetailsFragment : BaseFragment() {
                 }
             }
             isBookmarkLiveData.observe(viewLifecycleOwner) {
+                binding.imgBookmark.isActivated = it
+
                 if (it) {
-                    binding.imgBookmark.apply {
-                        setImageResource(R.drawable.bookmark_checked)
-                        setColorFilter(Resource.color(R.color.contrast))
-                    }
+                    binding.imgBookmark.setColorFilter(Resource.color(R.color.contrast))
                     return@observe
                 }
-                binding.imgBookmark.apply {
-                    setImageResource(R.drawable.bookmark_unchecked)
-                    setColorFilter(Resource.color(R.color.text_color))
-                }
-
+                binding.imgBookmark.setColorFilter(Resource.color(R.color.text_color))
             }
         }
     }

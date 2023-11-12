@@ -114,6 +114,7 @@
                 android:layout_width="20dp"
                 android:layout_height="18dp"
                 android:layout_gravity="center"
+                android:src="@drawable/selector_bookmark_home_item"
                 android:scaleType="fitCenter" />
         </FrameLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
