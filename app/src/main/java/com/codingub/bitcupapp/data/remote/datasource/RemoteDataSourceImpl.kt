@@ -1,8 +1,8 @@
 package com.codingub.bitcupapp.data.remote.datasource
 
+import com.codingub.bitcupapp.BuildConfig
 import com.codingub.bitcupapp.data.mappers.toFeatureCollection
 import com.codingub.bitcupapp.data.mappers.toPhoto
-import com.codingub.bitcupapp.data.prefs.AuthConfig
 import com.codingub.bitcupapp.data.remote.AppApi
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.domain.models.Photo
@@ -14,7 +14,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getCuratedPhotos(): List<Photo> {
         val curatedPhotos = api.getCuratedPhotos(
-            AuthConfig.getKey(),
+            BuildConfig.user_token,
             1,
             30
         ).photos
@@ -23,7 +23,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getFeaturedCollections(): List<FeaturedCollection> {
         val collections = api.getFeaturedCollections(
-            AuthConfig.getKey(),
+            BuildConfig.user_token,
             1,
             7
         ).collections
@@ -32,7 +32,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun searchPhotos(query: String): List<Photo> {
         val photos = api.searchPhotos(
-            AuthConfig.getKey(),
+            BuildConfig.user_token,
             query
         ).photos
         return photos.map { it.toPhoto() }
@@ -40,7 +40,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getPhoto(id: Long): Photo {
         val photo = api.getPhoto(
-            AuthConfig.getKey(),
+            BuildConfig.user_token,
             id
         )
         return photo.toPhoto()

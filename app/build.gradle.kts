@@ -1,9 +1,13 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     kotlin("kapt")
 }
+
+val properties = gradleLocalProperties(rootDir)
 
 android {
     namespace = "com.codingub.bitcupapp"
@@ -26,6 +30,8 @@ android {
             buildConfigField("String",
                 "app_endpoint",
                 "\"https://api.pexels.com/v1/\"")
+
+            buildConfigField("String", "user_token", "\"${properties.getProperty("USER_TOKEN")}\"")
         }
         release {
             isDebuggable = false
@@ -39,6 +45,7 @@ android {
                 "app_endpoint",
                 "\"https://api.pexels.com/v1/\"")
 
+            buildConfigField("String", "user_token", "\"${properties.getProperty("USER_TOKEN")}\"")
         }
     }
     compileOptions {
