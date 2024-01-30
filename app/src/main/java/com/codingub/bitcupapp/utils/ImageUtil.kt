@@ -11,7 +11,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
-import com.bumptech.glide.integration.compose.Transition
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -31,15 +30,28 @@ object ImageUtil {
     private val context: Context get() = App.getInstance()
 
     fun load(@DrawableRes drawableRes: Int, imageView: ImageView) {
-        Glide.with(context).load(drawableRes).into(imageView)
+        Glide.with(context).load(drawableRes).thumbnail(
+            Glide.with(context)
+                .asDrawable().sizeMultiplier(0.6f)
+        ).into(imageView)
     }
 
     fun load(drawable: Drawable, imageView: ImageView) {
-        Glide.with(context).load(drawable).into(imageView)
+        Glide.with(context).load(drawable)
+            .thumbnail(
+                Glide.with(context)
+                    .asDrawable().sizeMultiplier(0.6f)
+            ).into(imageView)
     }
 
     fun load(uri: Uri, imageView: ImageView) {
-        Glide.with(context).load(uri).into(imageView)
+        Glide.with(context)
+            .load(uri)
+            .thumbnail(
+                Glide.with(context)
+                    .asDrawable().sizeMultiplier(0.6f)
+            )
+            .into(imageView)
     }
 
     fun load(@DrawableRes drawableRes: Int, onLoaded: (Drawable) -> Unit) {
@@ -60,7 +72,7 @@ object ImageUtil {
                 dataSource: DataSource,
                 isFirstResource: Boolean
             ): Boolean {
-                resource?.let {
+                resource.let {
                     CoroutineScope(Dispatchers.Main).launch {
                         onLoaded(it)
                     }
@@ -89,7 +101,7 @@ object ImageUtil {
                 dataSource: DataSource,
                 isFirstResource: Boolean
             ): Boolean {
-                resource?.let {
+                resource.let {
                     CoroutineScope(Dispatchers.Main).launch {
                         onLoaded(it)
                     }
@@ -102,6 +114,10 @@ object ImageUtil {
     fun load(uri: Uri, onLoaded: (Drawable) -> Unit) {
         Glide.with(context)
             .load(uri)
+            .thumbnail(
+                Glide.with(context)
+                    .asDrawable().sizeMultiplier(0.6f)
+            )
             .listener(object : RequestListener<Drawable> {
 
                 override fun onLoadFailed(
@@ -120,7 +136,7 @@ object ImageUtil {
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
-                    resource?.let {
+                    resource.let {
                         CoroutineScope(Dispatchers.Main).launch {
                             onLoaded(it)
                         }
@@ -164,7 +180,8 @@ object ImageUtil {
                 } ?: throw IOException("Failed to get output stream.")
             } ?: throw IOException("Failed to create new MediaStore record.")
 
-            Toast.makeText(context,Resource.string(R.string.image_downloaded), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, Resource.string(R.string.image_downloaded), Toast.LENGTH_SHORT)
+                .show()
         } catch (e: IOException) {
             throw e
         }
