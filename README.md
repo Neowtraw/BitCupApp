@@ -11,15 +11,15 @@ With this approach, the amount of boilerplate code increases, in favor of standa
 - [Room](https://developer.android.com/training/data-storage/room) for caching
 - [Retrofit](https://square.github.io/retrofit/) 
 - [OkHttp](https://square.github.io/okhttp/)
-- [MVVM] (https://ru.wikipedia.org/wiki/Model-View-ViewModel)
-- [WorkManager] (https://developer.android.com/topic/libraries/architecture/workmanager) for removing data every hour if it contains some data
+- [MVVM](https://ru.wikipedia.org/wiki/Model-View-ViewModel)
+- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) for removing data every hour if it contains some data
 - [Splash Screen Api](https://developer.android.com/develop/ui/views/launch/splash-screen) to delete data every hour if it exists in the local database
-- [buildSrc] (https://blogs.halodoc.io/streamline-android-app-dependencies-with-buildsrc/)
-- [Flow] (https://developer.android.com/kotlin/flow)
-- [Coroutines] (https://developer.android.com/kotlin/coroutines)
-- [Glide] (https://github.com/bumptech/glide) for loading and caching images
-- [LiveData] (https://developer.android.com/topic/libraries/architecture/livedata)
-- 
+- [buildSrc](https://blogs.halodoc.io/streamline-android-app-dependencies-with-buildsrc/)
+- [Flow](https://developer.android.com/kotlin/flow)
+- [Coroutines](https://developer.android.com/kotlin/coroutines)
+- [Glide](https://github.com/bumptech/glide) for loading and caching images
+- [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+
 # Fragments
 
 ## **HomeFragment**
