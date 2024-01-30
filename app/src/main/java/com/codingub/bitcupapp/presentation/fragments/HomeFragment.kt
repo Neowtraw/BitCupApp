@@ -33,6 +33,7 @@ import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -127,12 +128,11 @@ class HomeFragment : BaseFragment() {
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
                     binding.imgClear.visibility = View.VISIBLE
-                    lifecycleScope.launch(Dispatchers.IO) {
                         vm.searchPhoto(s.toString())
                         vm.updateLastRequestedAction {
                             vm.searchPhoto(s.toString())
                         }
-                    }
+
                 } else {
                     binding.imgClear.visibility = View.GONE
                 }

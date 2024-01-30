@@ -14,6 +14,7 @@ import com.codingub.bitcupapp.data.worker.util.WorkerConstants
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.domain.models.Photo
 import com.codingub.bitcupapp.domain.repository.AppRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.TimeUnit
@@ -99,6 +100,7 @@ class AppRepositoryImpl @Inject constructor(
             val data = remoteDataSource.searchPhotos(query)
             ResultState.Success(data)
         } catch (e: Exception) {
+            if(e is CancellationException) throw e
             Log.e("searchPhotos", e.message.toString())
             ResultState.Error(e)
         }
