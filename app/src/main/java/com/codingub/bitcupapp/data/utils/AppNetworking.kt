@@ -7,7 +7,7 @@ import com.codingub.bitcupapp.data.remote.AppApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -49,7 +49,7 @@ open class AppNetworking @Inject constructor(
     private fun retrofitBuilder(): Retrofit.Builder {
         return Retrofit.Builder()
             .baseUrl(endpoint)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient())
     }
 

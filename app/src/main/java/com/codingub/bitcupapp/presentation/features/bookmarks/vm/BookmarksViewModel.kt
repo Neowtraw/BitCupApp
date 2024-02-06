@@ -9,30 +9,28 @@ import com.codingub.bitcupapp.domain.models.Photo
 import com.codingub.bitcupapp.domain.use_cases.GetBookmarkPhotos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class BookmarksViewModel @Inject constructor(
-    private val getBookmarkPhotos: GetBookmarkPhotos
+    private val getBookmarkPhotosUseCase: GetBookmarkPhotos
 ) : ViewModel() {
 
-    private val bookmarksLiveData: MutableLiveData<ResultState<List<Photo>>> = MutableLiveData()
-    fun getBookmarksLiveData(): LiveData<ResultState<List<Photo>>> = bookmarksLiveData
+    private val _bookmarks: MutableStateFlow<List<Photo>> = MutableStateFlow(listOf())
+    val bookmarks: StateFlow<List<Photo>> = _bookmarks
 
-
-    fun getBookmarks() {
+    fun getBookmarkPhotos() {
         viewModelScope.launch(Dispatchers.IO) {
-            withContext(Dispatchers.Main) {
-                bookmarksLiveData.value = ResultState.Loading()
+            getBookmarkPhotosUseCase().collect{
+                _bookmarks.value = it
             }
-            val bookmarks = getBookmarkPhotos()
-            withContext(Dispatchers.Main) {
-                bookmarks.collect {
-                    bookmarksLiveData.value = ResultState.Success(it)
-                }
-            }
+
         }
     }
 }

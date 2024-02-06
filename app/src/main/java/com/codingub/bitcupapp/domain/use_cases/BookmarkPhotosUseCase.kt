@@ -9,7 +9,7 @@ class IsBookmarkPhoto @Inject constructor(
     private val repository: AppRepository
 ) {
     suspend operator fun invoke(id: Long): Boolean {
-        return repository.getBookmarkPhoto(id)
+        return repository.isBookmarkPhoto(id)
     }
 }
 

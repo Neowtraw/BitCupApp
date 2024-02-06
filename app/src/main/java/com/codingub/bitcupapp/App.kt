@@ -8,10 +8,7 @@ import androidx.work.Configuration
 import javax.inject.Inject
 
 @HiltAndroidApp
-class App : Application(), Configuration.Provider {
-
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
+class App : Application() {
 
     init {
         Instance = this
@@ -21,10 +18,4 @@ class App : Application(), Configuration.Provider {
         private var Instance: App? = null
         fun getInstance(): App = Instance!!
     }
-
-    override val workManagerConfiguration: Configuration
-        get() = Configuration.Builder()
-            .setMinimumLoggingLevel(Log.INFO)
-            .setWorkerFactory(workerFactory)
-            .build()
 }

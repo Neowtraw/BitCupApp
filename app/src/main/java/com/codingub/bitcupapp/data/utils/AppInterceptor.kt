@@ -1,5 +1,6 @@
 package com.codingub.bitcupapp.data.utils
 
+import com.codingub.bitcupapp.BuildConfig
 import com.codingub.bitcupapp.common.ConnectionManager
 import com.codingub.bitcupapp.common.Constants
 import okhttp3.Interceptor
@@ -33,9 +34,7 @@ class AppInterceptor @Inject constructor(
         var response: Response? = null
         try {
             val request = chain.request().newBuilder()
-            request.addHeader("appVersion", buildVersionCode.toString())
-                .addHeader("appVersionName", buildVersionName)
-                .addHeader("source", "android")
+            request.addHeader("Authorization",  BuildConfig.user_token)
 
             response = chain.proceed(request.build())
             if (attempt < tryCnt && !response.isSuccessful) {

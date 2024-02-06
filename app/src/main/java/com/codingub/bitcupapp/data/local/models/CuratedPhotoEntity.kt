@@ -6,7 +6,7 @@ import com.codingub.bitcupapp.data.utils.SrcType
 
 @Entity(tableName = "CuratedPhoto")
 data class CuratedPhotoEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val id: Long,
     val width: Long,
     val height: Long,
@@ -16,7 +16,6 @@ data class CuratedPhotoEntity(
     val photographerId: Long,
     val avgColor: String?,
     val photoSrc: SrcType,
-    val liked: Boolean,
     val alt: String,
 )
 

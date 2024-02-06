@@ -2,9 +2,6 @@ package com.codingub.bitcupapp.common
 
 object Constants {
 
-    //workManager
-    const val UPDATE_INTERVAL = 1L
-
     //api
     const val DURATION = 180L
 

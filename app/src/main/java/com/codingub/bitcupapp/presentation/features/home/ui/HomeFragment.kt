@@ -13,7 +13,10 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
@@ -63,13 +66,13 @@ class HomeFragment : BaseFragment() {
         observeChanges()
         setupListeners()
 
-        vm.lastRequestedAction?.invoke() ?: vm.updateData()
+        vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
     }
 
 
     override fun onResume() {
         super.onResume()
-        vm.lastRequestedAction?.invoke() ?: vm.updateData()
+        vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
     }
 
     private fun customizeUI() {
@@ -139,7 +142,7 @@ class HomeFragment : BaseFragment() {
                 }
 
                 val collections =
-                    vm.getCollectionsLiveData().value?.data?.map { it.title } ?: return
+                    vm.collections.value.data?.map { it.title } ?: return
                 val matchingIndex = collections.indexOfFirst { it == s.toString() }
 
                 if (matchingIndex != -1) {
@@ -195,7 +198,7 @@ class HomeFragment : BaseFragment() {
 
         binding.llNetwork.tvTryAgain.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                vm.lastRequestedAction?.invoke() ?: vm.updateData()
+                vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
             }
         }
 
@@ -214,71 +217,78 @@ class HomeFragment : BaseFragment() {
 
     override fun observeChanges() {
 
-        with(vm) {
-            getCollectionsLiveData().observe(viewLifecycleOwner) { collection ->
-                when (collection) {
-                    is ResultState.Loading -> showLoading()
+            lifecycleScope.launch {
+                requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    vm.collections.collect { collection ->
+                        when (collection) {
+                            is ResultState.Loading -> showLoading()
 
-                    is ResultState.Success -> {
-                        featuredCollections = collection.data ?: emptyList()
-                        featuredCollections.forEachIndexed { _, category ->
-                            binding.Collections.apply {
-                                newTab().apply {
-                                    customView = FeaturedView(requireContext(), category)
-                                    view.setPadding(8.dp, 0, 8.dp, 0)
-                                }.also {
-                                    addTab(it)
-                                    selectTab(null)
-                                    tabs.add(it)
+                            is ResultState.Success -> {
+                                featuredCollections = collection.data ?: emptyList()
+                                featuredCollections.forEachIndexed { _, category ->
+                                    binding.Collections.apply {
+                                        newTab().apply {
+                                            customView = FeaturedView(requireContext(), category)
+                                            view.setPadding(8.dp, 0, 8.dp, 0)
+                                        }.also {
+                                            addTab(it)
+                                            selectTab(null)
+                                            tabs.add(it)
+
+                                        }
+                                    }
 
                                 }
+
+                                showSuccess()
                             }
 
+                            is ResultState.Error -> {
+                                showError()
+
+                                if (collection.data.isNullOrEmpty()) {
+                                    binding.llNetwork.llNetwork.visibility = View.VISIBLE
+                                }
+
+                                Toast.makeText(
+                                    requireContext(),
+                                    collection.error?.message.toString(),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         }
-
-                        showSuccess()
-                    }
-
-                    is ResultState.Error -> {
-                        showError()
-
-                        if (collection.data.isNullOrEmpty()) {
-                            binding.llNetwork.llNetwork.visibility = View.VISIBLE
-                        }
-
-                        Toast.makeText(
-                            requireContext(),
-                            collection.error?.message.toString(),
-                            Toast.LENGTH_LONG
-                        ).show()
                     }
                 }
             }
 
-            getPhotosLiveData().observe(viewLifecycleOwner) {
 
-                when (it) {
-                    is ResultState.Loading -> showLoading()
+        lifecycleScope.launch {
+            requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.photos.collect {
 
-                    is ResultState.Success -> {
-                        photoAdapter.photos = it.data ?: emptyList()
-                        photoAdapter.notifyItemRangeChanged(0, photoAdapter.itemCount)
+                    when (it) {
+                        is ResultState.Loading -> showLoading()
 
-                        showSuccess()
-                    }
+                        is ResultState.Success -> {
+                            photoAdapter.photos = it.data ?: emptyList()
+                            photoAdapter.notifyItemRangeChanged(0, photoAdapter.itemCount)
 
-                    is ResultState.Error -> {
-                        showError()
-
-                        if (it.data.isNullOrEmpty()) {
-                            binding.llNetwork.llNetwork.visibility = View.VISIBLE
+                            showSuccess()
                         }
 
-                        Toast.makeText(
-                            requireContext(),
-                            it.error?.message.toString(),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        is ResultState.Error -> {
+                            showError()
+
+                            if (it.data.isNullOrEmpty()) {
+                                binding.llNetwork.llNetwork.visibility = View.VISIBLE
+                            }
+
+                            Toast.makeText(
+                                requireContext(),
+                                it.error?.message.toString(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
@@ -294,11 +304,11 @@ class HomeFragment : BaseFragment() {
             binding.shimmer.visibility = View.GONE
             binding.photoContainerView.visibility = View.VISIBLE
 
-            if (vm.getCollectionsLiveData().value is ResultState.Success && binding.Collections.visibility == View.GONE) {
+            if (vm.collections.value is ResultState.Success && binding.Collections.visibility == View.GONE) {
                 binding.Collections.visibility = View.VISIBLE
             }
 
-            if (vm.getPhotosLiveData().value?.data.isNullOrEmpty()
+            if (vm.photos.value.data.isNullOrEmpty()
                 && binding.Collections.visibility == View.VISIBLE
             ) {
                 binding.llNotFound.llNotFound.visibility = View.VISIBLE
@@ -320,7 +330,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun showError() {
-        if (!vm.getCollectionsLiveData().value?.data.isNullOrEmpty()) {
+        if (!vm.collections.value.data.isNullOrEmpty()) {
             binding.Collections.visibility = View.VISIBLE
         }
 

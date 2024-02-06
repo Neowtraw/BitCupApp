@@ -19,27 +19,23 @@ interface AppApi {
     @GET(CURATED_PHOTOS)
     suspend fun getCuratedPhotos(
         //pagination (optional)
-        @Header("Authorization") key: String,
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
     ): GetCuratedPhotosResponse
 
     @GET("$GET_PHOTO{id}")
     suspend fun getPhoto(
-        @Header("Authorization") key: String,
         @Path("id") id: Long
     ): CuratedPhotoDto
 
     @GET(SEARCH_PHOTO)
     suspend fun searchPhotos(
-        @Header("Authorization") key: String,
         @Query("query") query: String
     ): PhotosSearchResponse
 
     @GET(FEATURED_COLLECTION)
     suspend fun getFeaturedCollections(
         //pagination
-        @Header("Authorization") key: String,
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
     ): GetFeaturedCollectionsResponse
