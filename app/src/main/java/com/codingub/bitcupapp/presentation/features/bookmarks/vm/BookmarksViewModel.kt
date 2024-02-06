@@ -1,4 +1,4 @@
-package com.codingub.bitcupapp.presentation.viewmodels
+package com.codingub.bitcupapp.presentation.features.bookmarks.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

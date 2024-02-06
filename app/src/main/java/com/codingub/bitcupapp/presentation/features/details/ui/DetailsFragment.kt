@@ -1,4 +1,4 @@
-package com.codingub.bitcupapp.presentation.fragments
+package com.codingub.bitcupapp.presentation.features.details.ui
 
 import android.annotation.SuppressLint
 import android.graphics.PointF
@@ -16,7 +16,8 @@ import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentDetailsBinding
 import com.codingub.bitcupapp.presentation.SharedViewModel
-import com.codingub.bitcupapp.presentation.viewmodels.DetailsViewModel
+import com.codingub.bitcupapp.presentation.features.details.vm.DetailsViewModel
+import com.codingub.bitcupapp.presentation.features.home.ui.HomeFragment
 import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.AnimationUtil
 import com.codingub.bitcupapp.utils.Font
@@ -72,6 +73,8 @@ class DetailsFragment : BaseFragment() {
             typeface = Font.REGULAR
             text = Resource.string(R.string.no_image_found)
         }
+
+        binding.llNotFound.llNotFound.visibility = View.GONE
         binding.llNotFound.tvExplore.typeface = Font.REGULAR
     }
 

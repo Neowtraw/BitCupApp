@@ -2,7 +2,6 @@ package com.codingub.bitcupapp.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -12,12 +11,14 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.isVisible
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.databinding.ActivityMainBinding
-import com.codingub.bitcupapp.presentation.fragments.BookmarksFragment
-import com.codingub.bitcupapp.presentation.fragments.DetailsFragment
-import com.codingub.bitcupapp.presentation.fragments.HomeFragment
+import com.codingub.bitcupapp.presentation.features.bookmarks.ui.BookmarksFragment
+import com.codingub.bitcupapp.presentation.features.details.ui.DetailsFragment
+import com.codingub.bitcupapp.presentation.features.home.ui.HomeFragment
 import com.codingub.bitcupapp.ui.base.BaseFragment
+import com.codingub.bitcupapp.utils.AnimationUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     //used for navigation
-    private val TIME_INTERVAL: Long = 2000
+    private val TIME_INTERVAL: Long = 2000L
     private var mBackPressedTime: Long = 0
 
     /**
@@ -101,9 +102,10 @@ class MainActivity : AppCompatActivity() {
 
     fun pushFragment(fragment: BaseFragment, backstack: String?) {
         if (fragment is DetailsFragment) {
-            binding.bottomNavigationView.visibility = View.GONE
+            AnimationUtil.animateNavBar(binding.layoutNavBar, false)
         } else {
-            binding.bottomNavigationView.visibility = View.VISIBLE
+            if (!binding.layoutNavBar.isVisible)
+                AnimationUtil.animateNavBar(binding.layoutNavBar, true)
         }
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -116,12 +118,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun back() {
+        if (supportFragmentManager.fragments.last() is BookmarksFragment) return
 
-        if (supportFragmentManager.fragments.last() is BookmarksFragment) {
-            return
-        }
         if (supportFragmentManager.fragments.last() is DetailsFragment) {
-            binding.bottomNavigationView.visibility = View.VISIBLE
+            AnimationUtil.animateNavBar(binding.layoutNavBar, true)
         }
 
         if (supportFragmentManager.fragments.last() is HomeFragment) {
@@ -148,6 +148,5 @@ class MainActivity : AppCompatActivity() {
         )
         supportFragmentManager.popBackStack()
         transaction.commit()
-
     }
 }

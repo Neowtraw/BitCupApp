@@ -1,4 +1,4 @@
-package com.codingub.bitcupapp.presentation.fragments
+package com.codingub.bitcupapp.presentation.features.bookmarks.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +12,9 @@ import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentBookmarksBinding
 import com.codingub.bitcupapp.presentation.SharedViewModel
-import com.codingub.bitcupapp.presentation.adapters.BookmarkPhotoAdapter
-import com.codingub.bitcupapp.presentation.viewmodels.BookmarksViewModel
+import com.codingub.bitcupapp.presentation.features.details.ui.DetailsFragment
+import com.codingub.bitcupapp.presentation.features.home.ui.HomeFragment
+import com.codingub.bitcupapp.presentation.features.bookmarks.vm.BookmarksViewModel
 import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ItemDecoration
@@ -52,6 +53,7 @@ class BookmarksFragment : BaseFragment() {
             text = Resource.string(R.string.no_bookmarks_found)
         }
         binding.llNotFound.tvExplore.typeface = Font.REGULAR
+        binding.llNotFound.llNotFound.visibility = View.GONE
     }
 
     private fun customizeBookmarksView() {

@@ -1,4 +1,4 @@
-package com.codingub.bitcupapp.presentation.fragments
+package com.codingub.bitcupapp.presentation.features.home.ui
 
 
 import android.graphics.Outline
@@ -21,9 +21,9 @@ import com.codingub.bitcupapp.databinding.FragmentHomeBinding
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.presentation.MainActivityViewModel
 import com.codingub.bitcupapp.presentation.SharedViewModel
-import com.codingub.bitcupapp.presentation.adapters.CuratedPhotoAdapter
-import com.codingub.bitcupapp.presentation.custom.FeaturedView
-import com.codingub.bitcupapp.presentation.viewmodels.HomeViewModel
+import com.codingub.bitcupapp.presentation.features.home.ui.custom.FeaturedView
+import com.codingub.bitcupapp.presentation.features.details.ui.DetailsFragment
+import com.codingub.bitcupapp.presentation.features.home.vm.HomeViewModel
 import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ItemDecoration
@@ -33,7 +33,6 @@ import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -80,6 +79,8 @@ class HomeFragment : BaseFragment() {
             typeface = Font.REGULAR
             text = Resource.string(R.string.no_results_found)
         }
+
+        binding.llNotFound.llNotFound.visibility = View.GONE
         binding.llNotFound.tvExplore.typeface = Font.REGULAR
     }
 

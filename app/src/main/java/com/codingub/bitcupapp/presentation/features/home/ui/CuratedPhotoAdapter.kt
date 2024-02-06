@@ -1,4 +1,4 @@
-package com.codingub.bitcupapp.presentation.adapters
+package com.codingub.bitcupapp.presentation.features.home.ui
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -6,16 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.codingub.bitcupapp.databinding.ItemBookmarkPhotoBinding
+import com.codingub.bitcupapp.databinding.ItemCuratedPhotoBinding
 import com.codingub.bitcupapp.domain.models.Photo
-import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ImageUtil
 
-class BookmarkPhotoAdapter(
+class CuratedPhotoAdapter(
     private inline val onPhotoSelected: (Photo) -> Unit
-) : RecyclerView.Adapter<BookmarkPhotoAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CuratedPhotoAdapter.ViewHolder>() {
 
-    private lateinit var binding: ItemBookmarkPhotoBinding
+    private lateinit var binding: ItemCuratedPhotoBinding
 
     //list of photos from db
     var photos: List<Photo>
@@ -35,20 +34,16 @@ class BookmarkPhotoAdapter(
     private val differ = AsyncListDiffer(this, diffCallback)
 
 
-    inner class ViewHolder(private val binding: ItemBookmarkPhotoBinding) :
+    inner class ViewHolder(private val binding: ItemCuratedPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         internal fun binding() {
             val photo = photos[bindingAdapterPosition]
+
             ImageUtil.load(Uri.parse(photo.photoSrc.large)) {
                 binding.imgPhoto.apply {
                     setImageDrawable(it)
                 }
-            }
-
-            binding.tvPhotographer.apply {
-                typeface = Font.REGULAR
-                text = photo.photographer
             }
         }
 
@@ -61,7 +56,7 @@ class BookmarkPhotoAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding =
-            ItemBookmarkPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemCuratedPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -70,5 +65,4 @@ class BookmarkPhotoAdapter(
     }
 
     override fun getItemCount(): Int = photos.size
-
 }

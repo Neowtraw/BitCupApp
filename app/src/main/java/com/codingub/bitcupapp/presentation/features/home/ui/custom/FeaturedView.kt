@@ -1,4 +1,4 @@
-package com.codingub.bitcupapp.presentation.custom
+package com.codingub.bitcupapp.presentation.features.home.ui.custom
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
