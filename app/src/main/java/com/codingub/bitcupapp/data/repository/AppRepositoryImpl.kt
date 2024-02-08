@@ -64,9 +64,10 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPhoto(id: Long): ResultState<Photo> {
+    override suspend fun getPhoto(id: Long, isRemote: Boolean): ResultState<Photo> {
         return try {
-            ResultState.Success(remoteDataSource.getPhoto(id))
+            if(isRemote) ResultState.Success(remoteDataSource.getPhoto(id))
+            else ResultState.Success(localDataSource.getBookmarkPhoto(id).firstOrNull()!!)
         } catch (e: Exception) {
             if (e is CancellationException) throw e
             if(!connectionManager.isConnected) return ResultState.Error(NetworkUnavailableException())

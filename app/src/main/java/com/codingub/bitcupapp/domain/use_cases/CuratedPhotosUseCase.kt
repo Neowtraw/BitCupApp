@@ -15,7 +15,7 @@ class GetLastCuratedPhotos @Inject constructor(
 class GetPhoto @Inject constructor(
     private val repository: AppRepository
 ) {
-    suspend operator fun invoke(id: Long): ResultState<Photo> = repository.getPhoto(id = id)
+    suspend operator fun invoke(id: Long, isRemote: Boolean): ResultState<Photo> = repository.getPhoto(id = id, isRemote = isRemote)
 }
 
 class SearchPhotos @Inject constructor(

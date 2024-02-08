@@ -11,7 +11,7 @@ interface AppRepository {
 
     suspend fun getFeaturedCollections(): ResultState<List<FeaturedCollection>>
     suspend fun getLastCuratedPhotos(): ResultState<List<Photo>>
-    suspend fun getPhoto(id: Long): ResultState<Photo>
+    suspend fun getPhoto(id: Long, isRemote: Boolean): ResultState<Photo>
     fun getBookmarkPhotos(): Flow<List<Photo>>
     suspend fun isBookmarkPhoto(id: Long): Boolean
 

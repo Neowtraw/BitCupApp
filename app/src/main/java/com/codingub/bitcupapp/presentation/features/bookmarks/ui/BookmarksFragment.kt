@@ -60,7 +60,7 @@ class BookmarksFragment : BaseFragment() {
             visibility = View.GONE
             setHasFixedSize(true)
             bookmarksAdapter = BookmarkPhotoAdapter {
-                model.setPhotoId(it.id)
+                model.setPhotoId(it.id, false)
                 pushFragment(DetailsFragment(), "details")
             }
             layoutManager = StaggeredGridLayoutManager(

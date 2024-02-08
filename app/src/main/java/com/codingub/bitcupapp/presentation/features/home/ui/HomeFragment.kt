@@ -114,7 +114,7 @@ class HomeFragment : BaseFragment() {
                 StaggeredGridLayoutManager.VERTICAL
             )
             photoAdapter = CuratedPhotoAdapter {
-                model.setPhotoId(it.id)
+                model.setPhotoId(it.id, true)
                 pushFragment(DetailsFragment(), "details")
             }
             adapter = photoAdapter

@@ -3,6 +3,9 @@ package com.codingub.bitcupapp.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * used to assign the data between fragments
@@ -10,11 +13,11 @@ import androidx.lifecycle.ViewModel
 class SharedViewModel : ViewModel() {
 
 
-    private val _photoId = MutableLiveData<Long>()
-    val photoId : LiveData<Long> get() = _photoId
+    private val _photoId : MutableStateFlow<Pair<Long, Boolean>?> = MutableStateFlow(null)
+    val photoId : StateFlow<Pair<Long, Boolean>?> get() = _photoId.asStateFlow()
 
-    fun setPhotoId(id: Long){
-        _photoId.value = id
+    fun setPhotoId(id: Long, isRemote: Boolean){
+        _photoId.value = id to isRemote
     }
 
 }

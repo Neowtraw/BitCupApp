@@ -12,6 +12,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentDetailsBinding
@@ -24,6 +27,8 @@ import com.codingub.bitcupapp.utils.Font
 import com.codingub.bitcupapp.utils.ImageUtil
 import com.codingub.bitcupapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlin.math.sqrt
 
 @AndroidEntryPoint
@@ -151,47 +156,56 @@ class DetailsFragment : BaseFragment() {
         with(model) {
             vm.getPhotoInfo(photoId.value!!)
         }
-        with(vm) {
-            photo.observe(viewLifecycleOwner) {
-                when (it) {
-                    is ResultState.Loading -> {
-                        showLoading()
-                    }
-
-                    is ResultState.Success -> {
-
-                        binding.tvPhotographer.text = it.data?.photographer ?: ""
-
-                        ImageUtil.load(Uri.parse(it.data?.photoSrc!!.large2x)) {
-                            binding.Photo.imgPhoto.apply {
-                                setImageDrawable(it)
-                            }
+        lifecycleScope.launch {
+            requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.photo.collectLatest {
+                    when (it) {
+                        is ResultState.Loading -> {
+                            showLoading()
                         }
-                        isBookmark()
 
-                        showResults()
-                    }
+                        is ResultState.Success -> {
 
-                    is ResultState.Error -> {
-                        Toast.makeText(
-                            requireContext(),
-                            it.error?.message.toString(),
-                            Toast.LENGTH_LONG
-                        ).show()
-                        showNetworkError()
+                            binding.tvPhotographer.text = it.data?.photographer ?: ""
+
+                            ImageUtil.load(Uri.parse(it.data?.photoSrc!!.large2x)) {
+                                binding.Photo.imgPhoto.apply {
+                                    setImageDrawable(it)
+                                }
+                            }
+                            vm.isBookmark()
+
+                            showResults()
+                        }
+
+                        is ResultState.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                it.error?.message.toString(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            showNetworkError()
+                        }
                     }
                 }
-            }
-            isBookmarkLiveData.observe(viewLifecycleOwner) {
-                binding.imgBookmark.isActivated = it
-
-                if (it) {
-                    binding.imgBookmark.setColorFilter(Resource.color(R.color.contrast))
-                    return@observe
-                }
-                binding.imgBookmark.setColorFilter(Resource.color(R.color.text_color))
             }
         }
+
+
+        lifecycleScope.launch {
+            requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.isBookmark.collectLatest {
+                    binding.imgBookmark.isActivated = it
+
+                    if (it) {
+                        binding.imgBookmark.setColorFilter(Resource.color(R.color.contrast))
+                        return@collectLatest
+                    }
+                    binding.imgBookmark.setColorFilter(Resource.color(R.color.text_color))
+                }
+            }
+        }
+
     }
 
 
