@@ -80,14 +80,12 @@ class BookmarksFragment : BaseFragment() {
 
 
     override fun observeChanges() {
-        with(vm) {
-            lifecycleScope.launch {
-                requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    vm.bookmarks.collect {
-                        binding.rvBookmarksView.visibility = View.VISIBLE
-                        bookmarksAdapter.photos = it
-                        bookmarksAdapter.notifyItemChanged(0, it.size)
-                    }
+        lifecycleScope.launch {
+            requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.bookmarks.collect {
+                    binding.rvBookmarksView.visibility = View.VISIBLE
+                    bookmarksAdapter.photos = it
+                    bookmarksAdapter.notifyItemChanged(0, it.size)
                 }
             }
         }

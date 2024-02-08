@@ -4,6 +4,7 @@ import com.codingub.bitcupapp.data.remote.models.CuratedPhotoDto
 import com.codingub.bitcupapp.data.remote.response.GetCuratedPhotosResponse
 import com.codingub.bitcupapp.data.remote.response.GetFeaturedCollectionsResponse
 import com.codingub.bitcupapp.data.remote.response.PhotosSearchResponse
+import com.codingub.bitcupapp.data.utils.Cacheable
 import com.codingub.bitcupapp.data.utils.EndPoints.CURATED_PHOTOS
 import com.codingub.bitcupapp.data.utils.EndPoints.FEATURED_COLLECTION
 import com.codingub.bitcupapp.data.utils.EndPoints.GET_PHOTO
@@ -16,6 +17,7 @@ import retrofit2.http.Query
 interface AppApi {
 
 
+    @Cacheable
     @GET(CURATED_PHOTOS)
     suspend fun getCuratedPhotos(
         //pagination (optional)
@@ -33,6 +35,7 @@ interface AppApi {
         @Query("query") query: String
     ): PhotosSearchResponse
 
+    @Cacheable
     @GET(FEATURED_COLLECTION)
     suspend fun getFeaturedCollections(
         //pagination

@@ -69,11 +69,11 @@ class HomeFragment : BaseFragment() {
         vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
-    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//      //  vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
+//    }
 
     private fun customizeUI() {
         binding.llNetwork.tvTryAgain.typeface = Font.BOLD

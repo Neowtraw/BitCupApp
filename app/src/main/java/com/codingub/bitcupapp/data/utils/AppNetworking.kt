@@ -1,9 +1,12 @@
 package com.codingub.bitcupapp.data.utils
 
+import android.content.Context
 import com.codingub.bitcupapp.common.Constants
 import com.codingub.bitcupapp.common.Constants.Injection.ENDPOINT
 import com.codingub.bitcupapp.common.Constants.Injection.IS_DEBUG
 import com.codingub.bitcupapp.data.remote.AppApi
+import dagger.hilt.android.qualifiers.ApplicationContext
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,8 +18,15 @@ import javax.inject.Named
 open class AppNetworking @Inject constructor(
     @Named(IS_DEBUG) val isDebugMode: Boolean,
     @Named(ENDPOINT) private val endpoint: String,
-    private val interceptor: AppInterceptor
+    @ApplicationContext private val context: Context,
+    private val cacheInterceptor: CacheInterceptor,
+    private val onlineInterceptor: OnlineInterceptor,
+    private val offlineInterceptor: OfflineInterceptor
 ) {
+
+    // cache
+    private val cacheSize = (10 * 1024 * 1024L) // 10 MB
+    private val cache = Cache(context.cacheDir, cacheSize)
 
     private var retrofit: Retrofit? = null
     private var okHttpClient: OkHttpClient? = null
@@ -30,16 +40,16 @@ open class AppNetworking @Inject constructor(
     open fun okHttpClient(): OkHttpClient {
         if (okHttpClient == null) {
             val builder: OkHttpClient.Builder = OkHttpClient.Builder()
-                .addInterceptor(interceptor)
+                .cache(cache)
+                .addNetworkInterceptor(cacheInterceptor)
+                //.addInterceptor(offlineInterceptor)
+               // .addNetworkInterceptor(onlineInterceptor)
                 .addInterceptor(HttpLoggingInterceptor().apply {
                     setLevel(
-                        if (isDebugMode) HttpLoggingInterceptor.Level.BODY
+                        if (isDebugMode) HttpLoggingInterceptor.Level.BASIC
                         else HttpLoggingInterceptor.Level.NONE
                     )
                 })
-                .connectTimeout(Constants.DURATION, TimeUnit.SECONDS)
-                .readTimeout(Constants.DURATION, TimeUnit.SECONDS)
-                .writeTimeout(Constants.DURATION, TimeUnit.SECONDS)
 
             okHttpClient = builder.build()
         }
