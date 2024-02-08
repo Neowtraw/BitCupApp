@@ -1,6 +1,5 @@
 package com.codingub.bitcupapp.utils.extension
 
-import android.content.res.Resources
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.core.graphics.ColorUtils
@@ -20,12 +19,6 @@ fun Int.mixWith(
 
 val Float.dp get() = AndroidUtil.dp(this)
 
-val Float.px get() = AndroidUtil.px(this)
-
-val Int.sp get() = this / Resources.getSystem().displayMetrics.density
-
-val Float.sp get() = this / Resources.getSystem().displayMetrics.density
-
 /*
     Boolean
 */
@@ -33,9 +26,3 @@ val Float.sp get() = this / Resources.getSystem().displayMetrics.density
 fun Boolean.asInt(): Int = if (this) 1 else 0
 
 fun Boolean.asFloat(): Float = asInt().toFloat()
-
-fun Any?.isEmptyOrNull(): Boolean {
-    if (this is Collection<*>?) return this.isNullOrEmpty()
-    if (this is String?) return this.isNullOrEmpty()
-    return this == null
-}

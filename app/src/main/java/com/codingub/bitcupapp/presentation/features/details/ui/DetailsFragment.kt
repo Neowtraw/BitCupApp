@@ -34,7 +34,7 @@ import kotlin.math.sqrt
 @AndroidEntryPoint
 class DetailsFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentDetailsBinding
+    private var binding: FragmentDetailsBinding? = null
 
     private val vm: DetailsViewModel by viewModels()
     private val model: SharedViewModel by activityViewModels()
@@ -51,8 +51,8 @@ class DetailsFragment : BaseFragment() {
             scaleFactor *= detector.scaleFactor
             scaleFactor = originalScale.coerceAtLeast(scaleFactor.coerceAtMost(maxScale))
 
-            binding.Photo.imgPhoto.scaleX = scaleFactor
-            binding.Photo.imgPhoto.scaleY = scaleFactor
+            binding!!.Photo.imgPhoto.scaleX = scaleFactor
+            binding!!.Photo.imgPhoto.scaleY = scaleFactor
 
             return true
         }
@@ -66,26 +66,31 @@ class DetailsFragment : BaseFragment() {
         createUI()
         setupListeners()
         observeChanges()
-        return binding.root
+        return binding!!.root
+    }
+
+    override fun destroyView() {
+        super.destroyView()
+        binding = null
     }
 
     private fun createUI() {
         scaleGestureDetector = ScaleGestureDetector(requireContext(), ScaleListener())
 
-        binding.download.typeface = Font.REGULAR
-        binding.tvPhotographer.typeface = Font.REGULAR
-        binding.llNotFound.tvNoResult.apply {
+        binding!!.download.typeface = Font.REGULAR
+        binding!!.tvPhotographer.typeface = Font.REGULAR
+        binding!!.llNotFound.tvNoResult.apply {
             typeface = Font.REGULAR
             text = Resource.string(R.string.no_image_found)
         }
 
-        binding.llNotFound.llNotFound.visibility = View.GONE
-        binding.llNotFound.tvExplore.typeface = Font.REGULAR
+        binding!!.llNotFound.llNotFound.visibility = View.GONE
+        binding!!.llNotFound.tvExplore.typeface = Font.REGULAR
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupListeners() {
-        binding.Photo.imgPhoto.setOnTouchListener { _, event ->
+        binding!!.Photo.imgPhoto.setOnTouchListener { _, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     initialPointer1 = PointF(event.getX(0), event.getY(0))
@@ -108,19 +113,20 @@ class DetailsFragment : BaseFragment() {
                         val currentDistance = distance(currentPointer1, currentPointer2)
 
                         scaleFactor *= currentDistance / initialDistance
-                        scaleFactor = Math.max(originalScale, Math.min(scaleFactor, maxScale))
+                        scaleFactor =
+                            originalScale.coerceAtLeast(scaleFactor.coerceAtMost(maxScale))
 
-                        binding.Photo.imgPhoto.pivotX = centerX
-                        binding.Photo.imgPhoto.pivotY = centerY
-                        binding.Photo.imgPhoto.scaleX = scaleFactor
-                        binding.Photo.imgPhoto.scaleY = scaleFactor
+                        binding!!.Photo.imgPhoto.pivotX = centerX
+                        binding!!.Photo.imgPhoto.pivotY = centerY
+                        binding!!.Photo.imgPhoto.scaleX = scaleFactor
+                        binding!!.Photo.imgPhoto.scaleY = scaleFactor
                     }
                 }
 
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP, MotionEvent.ACTION_CANCEL -> {
                     initialPointer1 = null
                     initialPointer2 = null
-                    binding.Photo.imgPhoto.performClick()
+                    binding!!.Photo.imgPhoto.performClick()
                     resetImageScaleWithAnimation()
 
                 }
@@ -129,27 +135,26 @@ class DetailsFragment : BaseFragment() {
             true
         }
 
-        binding.back.setOnClickListener {
+        binding!!.back.setOnClickListener {
             backFragment()
         }
-        binding.bookmark.setOnClickListener {
+        binding!!.bookmark.setOnClickListener {
             it.startAnimation(AnimationUtil.clickAnimation())
             vm.updateBookmark()
         }
-        binding.download.setOnClickListener {
+        binding!!.download.setOnClickListener {
             it.startAnimation(AnimationUtil.clickAnimation())
 
             ImageUtil.loadBitmapFromUri(
-                Uri.parse(vm.photo.value!!.data!!.photoSrc.large2x),
+                Uri.parse(vm.photo.value.data!!.photoSrc.large2x),
                 requireContext()
             ) {
                 ImageUtil.saveBitmapAsImageToDevice(requireContext(), it)
             }
         }
-        binding.llNotFound.tvExplore.setOnClickListener {
+        binding!!.llNotFound.tvExplore.setOnClickListener {
             pushFragment(HomeFragment(), "home")
         }
-
     }
 
     override fun observeChanges() {
@@ -166,10 +171,10 @@ class DetailsFragment : BaseFragment() {
 
                         is ResultState.Success -> {
 
-                            binding.tvPhotographer.text = it.data?.photographer ?: ""
+                            binding!!.tvPhotographer.text = it.data?.photographer ?: ""
 
                             ImageUtil.load(Uri.parse(it.data?.photoSrc!!.large2x)) {
-                                binding.Photo.imgPhoto.apply {
+                                binding!!.Photo.imgPhoto.apply {
                                     setImageDrawable(it)
                                 }
                             }
@@ -193,16 +198,14 @@ class DetailsFragment : BaseFragment() {
 
 
         lifecycleScope.launch {
-            requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                vm.isBookmark.collectLatest {
-                    binding.imgBookmark.isActivated = it
+            vm.isBookmark.collectLatest {
+                binding!!.imgBookmark.isActivated = it
 
-                    if (it) {
-                        binding.imgBookmark.setColorFilter(Resource.color(R.color.contrast))
-                        return@collectLatest
-                    }
-                    binding.imgBookmark.setColorFilter(Resource.color(R.color.text_color))
+                if (it) {
+                    binding!!.imgBookmark.setColorFilter(Resource.color(R.color.contrast))
+                    return@collectLatest
                 }
+                binding!!.imgBookmark.setColorFilter(Resource.color(R.color.text_color))
             }
         }
 
@@ -210,30 +213,30 @@ class DetailsFragment : BaseFragment() {
 
 
     private fun showLoading() {
-        binding.llNotFound.llNotFound.visibility = View.GONE
-        binding.tvPhotographer.visibility = View.GONE
-        binding.Photo.imgPhoto.visibility = View.GONE
-        binding.llInfo.visibility = View.GONE
+        binding!!.llNotFound.llNotFound.visibility = View.GONE
+        binding!!.tvPhotographer.visibility = View.GONE
+        binding!!.Photo.imgPhoto.visibility = View.GONE
+        binding!!.llInfo.visibility = View.GONE
 
-        binding.progressBar.visibility = View.VISIBLE
+        binding!!.progressBar.visibility = View.VISIBLE
     }
 
     private fun showResults() {
-        binding.llNotFound.llNotFound.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
+        binding!!.llNotFound.llNotFound.visibility = View.GONE
+        binding!!.progressBar.visibility = View.GONE
 
-        binding.tvPhotographer.visibility = View.VISIBLE
-        binding.Photo.imgPhoto.visibility = View.VISIBLE
-        binding.llInfo.visibility = View.VISIBLE
+        binding!!.tvPhotographer.visibility = View.VISIBLE
+        binding!!.Photo.imgPhoto.visibility = View.VISIBLE
+        binding!!.llInfo.visibility = View.VISIBLE
     }
 
     private fun showNetworkError() {
-        binding.tvPhotographer.visibility = View.GONE
-        binding.Photo.imgPhoto.visibility = View.GONE
-        binding.llInfo.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
+        binding!!.tvPhotographer.visibility = View.GONE
+        binding!!.Photo.imgPhoto.visibility = View.GONE
+        binding!!.llInfo.visibility = View.GONE
+        binding!!.progressBar.visibility = View.GONE
 
-        binding.llNotFound.llNotFound.visibility = View.VISIBLE
+        binding!!.llNotFound.llNotFound.visibility = View.VISIBLE
     }
 
     /*
@@ -241,7 +244,7 @@ class DetailsFragment : BaseFragment() {
      */
 
     private fun resetImageScaleWithAnimation() {
-        binding.Photo.imgPhoto.animate()
+        binding!!.Photo.imgPhoto.animate()
             .scaleX(originalScale)
             .scaleY(originalScale)
             .setDuration(300)

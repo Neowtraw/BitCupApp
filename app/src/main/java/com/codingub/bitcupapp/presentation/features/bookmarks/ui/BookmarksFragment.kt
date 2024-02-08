@@ -28,8 +28,8 @@ class BookmarksFragment : BaseFragment() {
 
     private val vm: BookmarksViewModel by viewModels()
     private val model: SharedViewModel by activityViewModels()
-    private lateinit var binding: FragmentBookmarksBinding
-    private lateinit var bookmarksAdapter: BookmarkPhotoAdapter
+    private var binding: FragmentBookmarksBinding? = null
+    private var bookmarksAdapter: BookmarkPhotoAdapter? = null
 
     override fun createView(inf: LayoutInflater, con: ViewGroup?, state: Bundle?): View {
         binding = FragmentBookmarksBinding.inflate(inf, con, false)
@@ -40,23 +40,29 @@ class BookmarksFragment : BaseFragment() {
         setupListeners()
 
         observeChanges()
-        return binding.root
+        return binding!!.root
+    }
+
+    override fun destroyView() {
+        super.destroyView()
+        binding = null
+        bookmarksAdapter = null
     }
 
     private fun customizeUI() {
 
-        binding.tvBookmarks.typeface = Font.REGULAR
-        binding.tvTryAgain.typeface = Font.BOLD
-        binding.llNotFound.tvNoResult.apply {
+        binding!!.tvBookmarks.typeface = Font.REGULAR
+        binding!!.tvTryAgain.typeface = Font.BOLD
+        binding!!.llNotFound.tvNoResult.apply {
             typeface = Font.REGULAR
             text = Resource.string(R.string.no_bookmarks_found)
         }
-        binding.llNotFound.tvExplore.typeface = Font.REGULAR
-        binding.llNotFound.llNotFound.visibility = View.GONE
+        binding!!.llNotFound.tvExplore.typeface = Font.REGULAR
+        binding!!.llNotFound.llNotFound.visibility = View.GONE
     }
 
     private fun customizeBookmarksView() {
-        binding.rvBookmarksView.apply {
+        binding!!.rvBookmarksView.apply {
             visibility = View.GONE
             setHasFixedSize(true)
             bookmarksAdapter = BookmarkPhotoAdapter {
@@ -73,7 +79,7 @@ class BookmarksFragment : BaseFragment() {
     }
 
     private fun setupListeners() {
-        binding.llNotFound.tvExplore.setOnClickListener {
+        binding!!.llNotFound.tvExplore.setOnClickListener {
             pushFragment(HomeFragment(), "home")
         }
     }
@@ -83,9 +89,9 @@ class BookmarksFragment : BaseFragment() {
         lifecycleScope.launch {
             requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.bookmarks.collect {
-                    binding.rvBookmarksView.visibility = View.VISIBLE
-                    bookmarksAdapter.photos = it
-                    bookmarksAdapter.notifyItemChanged(0, it.size)
+                    binding!!.rvBookmarksView.visibility = View.VISIBLE
+                    bookmarksAdapter!!.photos = it
+                    bookmarksAdapter!!.notifyItemChanged(0, it.size)
                 }
             }
         }

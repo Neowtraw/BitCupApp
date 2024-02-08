@@ -13,10 +13,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
@@ -24,8 +21,8 @@ import com.codingub.bitcupapp.databinding.FragmentHomeBinding
 import com.codingub.bitcupapp.domain.models.FeaturedCollection
 import com.codingub.bitcupapp.presentation.MainActivityViewModel
 import com.codingub.bitcupapp.presentation.SharedViewModel
-import com.codingub.bitcupapp.presentation.features.home.ui.custom.FeaturedView
 import com.codingub.bitcupapp.presentation.features.details.ui.DetailsFragment
+import com.codingub.bitcupapp.presentation.features.home.ui.custom.FeaturedView
 import com.codingub.bitcupapp.presentation.features.home.vm.HomeViewModel
 import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.Font
@@ -44,11 +41,10 @@ class HomeFragment : BaseFragment() {
     private val vm: HomeViewModel by viewModels()
     private val activityVm: MainActivityViewModel by activityViewModels()
     private val model: SharedViewModel by activityViewModels()
-    private lateinit var binding: FragmentHomeBinding
 
-    private lateinit var featuredCollections: List<FeaturedCollection>
+    private var binding: FragmentHomeBinding? = null
     private val tabs: MutableList<TabLayout.Tab> = mutableListOf()
-    private lateinit var photoAdapter: CuratedPhotoAdapter
+    private var photoAdapter: CuratedPhotoAdapter? = null
 
 
     override fun createView(inf: LayoutInflater, con: ViewGroup?, state: Bundle?): View {
@@ -59,38 +55,38 @@ class HomeFragment : BaseFragment() {
         createTabLayout()
         createPhotoContainerView()
 
-        return binding.root
+        vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
+
+        return binding!!.root
     }
 
     override fun viewCreated() {
         observeChanges()
         setupListeners()
-
-        vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
     }
 
-//
-//    override fun onResume() {
-//        super.onResume()
-//      //  vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
-//    }
+    override fun destroyView() {
+        super.destroyView()
+        binding = null
+        photoAdapter = null
+    }
 
     private fun customizeUI() {
-        binding.llNetwork.tvTryAgain.typeface = Font.BOLD
-        binding.etSearch.typeface = Font.REGULAR
-        binding.llNotFound.tvNoResult.apply {
+        binding!!.llNetwork.tvTryAgain.typeface = Font.BOLD
+        binding!!.etSearch.typeface = Font.REGULAR
+        binding!!.llNotFound.tvNoResult.apply {
             typeface = Font.REGULAR
             text = Resource.string(R.string.no_results_found)
         }
 
-        binding.llNotFound.llNotFound.visibility = View.GONE
-        binding.llNotFound.tvExplore.typeface = Font.REGULAR
+        binding!!.llNotFound.llNotFound.visibility = View.GONE
+        binding!!.llNotFound.tvExplore.typeface = Font.REGULAR
     }
 
     private fun createTabLayout() {
 
 
-        binding.Collections.apply {
+        binding!!.Collections.apply {
             id = View.generateViewId()
             setBackgroundResource(R.color.background)
             tabMode = TabLayout.MODE_AUTO
@@ -107,7 +103,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun createPhotoContainerView() {
-        binding.photoContainerView.apply {
+        binding!!.photoContainerView.apply {
             setHasFixedSize(true)
             layoutManager = StaggeredGridLayoutManager(
                 2,
@@ -124,21 +120,21 @@ class HomeFragment : BaseFragment() {
 
     private fun setupListeners() {
 
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
+        binding!!.etSearch.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
                 Unit
 
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
-                    binding.imgClear.visibility = View.VISIBLE
+                    binding!!.imgClear.visibility = View.VISIBLE
+                    vm.searchPhoto(s.toString())
+                    vm.updateLastRequestedAction {
                         vm.searchPhoto(s.toString())
-                        vm.updateLastRequestedAction {
-                            vm.searchPhoto(s.toString())
-                        }
+                    }
 
                 } else {
-                    binding.imgClear.visibility = View.GONE
+                    binding!!.imgClear.visibility = View.GONE
                 }
 
                 val collections =
@@ -146,20 +142,20 @@ class HomeFragment : BaseFragment() {
                 val matchingIndex = collections.indexOfFirst { it == s.toString() }
 
                 if (matchingIndex != -1) {
-                    binding.Collections.getTabAt(matchingIndex)?.select()
+                    binding!!.Collections.getTabAt(matchingIndex)?.select()
                 } else {
-                    binding.Collections.selectTab(null)
+                    binding!!.Collections.selectTab(null)
                 }
 
             }
         })
 
-        binding.etSearch.setOnClickListener {
-            binding.etSearch.text = null
+        binding!!.etSearch.setOnClickListener {
+            binding!!.etSearch.text = null
         }
 
 
-        binding.etSearch.setOnEditorActionListener { textView, actionId, event ->
+        binding!!.etSearch.setOnEditorActionListener { textView, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val searchText = textView.text.toString()
                 vm.searchPhoto(searchText)
@@ -171,12 +167,12 @@ class HomeFragment : BaseFragment() {
             false
         }
 
-        binding.imgClear.setOnClickListener {
-            if (binding.etSearch.text?.isNotEmpty() == true) binding.etSearch.text = null
+        binding!!.imgClear.setOnClickListener {
+            if (binding!!.etSearch.text?.isNotEmpty() == true) binding!!.etSearch.text = null
 
         }
 
-        binding.Collections.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding!!.Collections.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 val index = tabs.indexOf(tab)
@@ -185,7 +181,7 @@ class HomeFragment : BaseFragment() {
                 categoryView.setChecked(true, animated = true)
 
 
-                binding.etSearch.setText(categoryView.text)
+                binding!!.etSearch.setText(categoryView.text)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -196,13 +192,13 @@ class HomeFragment : BaseFragment() {
             override fun onTabReselected(tab: TabLayout.Tab) = Unit
         })
 
-        binding.llNetwork.tvTryAgain.setOnClickListener {
+        binding!!.llNetwork.tvTryAgain.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 vm.lastRequestedAction.value?.invoke() ?: vm.updateData()
             }
         }
 
-        binding.llNotFound.tvExplore.setOnClickListener {
+        binding!!.llNotFound.tvExplore.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 vm.getCuratedPhotos()
                 vm.updateLastRequestedAction {
@@ -217,134 +213,130 @@ class HomeFragment : BaseFragment() {
 
     override fun observeChanges() {
 
-            lifecycleScope.launch {
-                requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    vm.collections.collect { collection ->
-                        when (collection) {
-                            is ResultState.Loading -> showLoading()
+        lifecycleScope.launch {
+            vm.collections.collect { collection ->
+                when (collection) {
+                    is ResultState.Loading -> showLoading()
 
-                            is ResultState.Success -> {
-                                featuredCollections = collection.data ?: emptyList()
-                                featuredCollections.forEachIndexed { _, category ->
-                                    binding.Collections.apply {
-                                        newTab().apply {
-                                            customView = FeaturedView(requireContext(), category)
-                                            view.setPadding(8.dp, 0, 8.dp, 0)
-                                        }.also {
-                                            addTab(it)
-                                            selectTab(null)
-                                            tabs.add(it)
-
-                                        }
-                                    }
+                    is ResultState.Success -> {
+                      val featuredCollections = collection.data ?: emptyList()
+                        featuredCollections.forEachIndexed { _, category ->
+                            binding!!.Collections.apply {
+                                newTab().apply {
+                                    customView = FeaturedView(requireContext(), category)
+                                    view.setPadding(8.dp, 0, 8.dp, 0)
+                                }.also {
+                                    addTab(it)
+                                    selectTab(null)
+                                    tabs.add(it)
 
                                 }
-
-                                showSuccess()
                             }
 
-                            is ResultState.Error -> {
-                                showError()
-
-                                if (collection.data.isNullOrEmpty()) {
-                                    binding.llNetwork.llNetwork.visibility = View.VISIBLE
-                                }
-
-                                Toast.makeText(
-                                    requireContext(),
-                                    collection.error?.message.toString(),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
                         }
+
+                        showSuccess()
+                    }
+
+                    is ResultState.Error -> {
+                        showError()
+
+                        if (collection.data.isNullOrEmpty()) {
+                            binding!!.llNetwork.llNetwork.visibility = View.VISIBLE
+                        }
+
+                        Toast.makeText(
+                            requireContext(),
+                            collection.error?.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
+
             }
+        }
 
 
         lifecycleScope.launch {
-            requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                vm.photos.collect {
+            vm.photos.collect {
 
-                    when (it) {
-                        is ResultState.Loading -> showLoading()
+                when (it) {
+                    is ResultState.Loading -> showLoading()
 
-                        is ResultState.Success -> {
-                            photoAdapter.photos = it.data ?: emptyList()
-                            photoAdapter.notifyItemRangeChanged(0, photoAdapter.itemCount)
+                    is ResultState.Success -> {
+                        photoAdapter!!.photos = it.data ?: emptyList()
+                        photoAdapter!!.notifyItemRangeChanged(0, photoAdapter!!.itemCount)
 
-                            showSuccess()
+                        showSuccess()
+                    }
+
+                    is ResultState.Error -> {
+                        showError()
+
+                        if (it.data.isNullOrEmpty()) {
+                            binding!!.llNetwork.llNetwork.visibility = View.VISIBLE
                         }
 
-                        is ResultState.Error -> {
-                            showError()
-
-                            if (it.data.isNullOrEmpty()) {
-                                binding.llNetwork.llNetwork.visibility = View.VISIBLE
-                            }
-
-                            Toast.makeText(
-                                requireContext(),
-                                it.error?.message.toString(),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+                        Toast.makeText(
+                            requireContext(),
+                            it.error?.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
         }
-
     }
 
     private fun showSuccess() {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(500)
-            binding.llNetwork.llNetwork.visibility = View.GONE
-            binding.progressBar.visibility = View.GONE
-            binding.shimmer.visibility = View.GONE
-            binding.photoContainerView.visibility = View.VISIBLE
+            binding!!.llNetwork.llNetwork.visibility = View.GONE
+            binding!!.progressBar.visibility = View.GONE
+            binding!!.shimmer.visibility = View.GONE
+            binding!!.photoContainerView.visibility = View.VISIBLE
 
-            if (vm.collections.value is ResultState.Success && binding.Collections.visibility == View.GONE) {
-                binding.Collections.visibility = View.VISIBLE
+            if (vm.collections.value is ResultState.Success && binding!!.Collections.visibility == View.GONE) {
+                binding!!.Collections.visibility = View.VISIBLE
             }
 
             if (vm.photos.value.data.isNullOrEmpty()
-                && binding.Collections.visibility == View.VISIBLE
+                && binding!!.Collections.visibility == View.VISIBLE
             ) {
-                binding.llNotFound.llNotFound.visibility = View.VISIBLE
+                binding!!.llNotFound.llNotFound.visibility = View.VISIBLE
             }
             showScreen()
         }
     }
 
     private fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
-        binding.shimmer.visibility = View.VISIBLE
+        binding!!.progressBar.visibility = View.VISIBLE
+        binding!!.shimmer.visibility = View.VISIBLE
 
 
-        binding.llNetwork.llNetwork.visibility = View.GONE
-        binding.photoContainerView.visibility = View.GONE
-        binding.Collections.visibility = View.GONE
-        binding.llNotFound.llNotFound.visibility = View.GONE
+        binding!!.llNetwork.llNetwork.visibility = View.GONE
+        binding!!.photoContainerView.visibility = View.GONE
+        binding!!.Collections.visibility = View.GONE
+        binding!!.llNotFound.llNotFound.visibility = View.GONE
 
     }
 
     private fun showError() {
         if (!vm.collections.value.data.isNullOrEmpty()) {
-            binding.Collections.visibility = View.VISIBLE
+            binding!!.Collections.visibility = View.VISIBLE
         }
 
-        binding.progressBar.visibility = View.VISIBLE
+        binding!!.progressBar.visibility = View.VISIBLE
 
 
-        binding.shimmer.visibility = View.GONE
-        binding.llNotFound.llNotFound.visibility = View.GONE
-        binding.photoContainerView.visibility = View.GONE
+        binding!!.shimmer.visibility = View.GONE
+        binding!!.llNotFound.llNotFound.visibility = View.GONE
+        binding!!.photoContainerView.visibility = View.GONE
         showScreen()
     }
 
     private fun showScreen() {
-        if (activityVm.isLoading.value) activityVm.isLoading.value = false
+        if (activityVm.isLoading.value) activityVm.changeLoading(false)
     }
 
 }

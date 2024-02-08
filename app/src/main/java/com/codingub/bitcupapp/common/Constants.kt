@@ -2,9 +2,6 @@ package com.codingub.bitcupapp.common
 
 object Constants {
 
-    //api
-    const val DURATION = 180L
-
     object Injection {
         const val IS_DEBUG = "is-debug"
         const val BUILD_VERSION_CODE = "build-version-code"

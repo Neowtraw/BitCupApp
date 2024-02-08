@@ -76,6 +76,11 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.9.0")
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
+
+
     hilt()
     base()
     gson()

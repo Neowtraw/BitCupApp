@@ -56,7 +56,7 @@ class HomeViewModel @Inject constructor(
 
         searchJob?.cancel()
 
-        searchJob = viewModelScope.launch {
+        searchJob = viewModelScope.launch(Dispatchers.IO) {
             _photos.update { searchPhotos(query) }
         }
     }

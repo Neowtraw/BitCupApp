@@ -12,6 +12,13 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.databinding.ActivityMainBinding
 import com.codingub.bitcupapp.presentation.features.bookmarks.ui.BookmarksFragment
@@ -25,7 +32,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val vm: MainActivityViewModel by viewModels()
-    private lateinit var binding: ActivityMainBinding
+    private  var binding: ActivityMainBinding? = null
+    private var navController: NavController? = null
 
     //used for navigation
     private val TIME_INTERVAL: Long = 2000L
@@ -52,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         Instance = this
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
+        val view = binding?.root
         setContentView(view)
 
         hideSystemUI()
@@ -71,14 +79,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        navController = null
+        binding = null
+    }
+
     /*
         UI
      */
 
     private fun createBottomBar() {
-        binding.bottomNavigationView.setOnItemSelectedListener {
+//        val navHostFragment = supportFragmentManager.findFragmentById(
+//            R.id.fragment_container_view
+//        ) as NavHostFragment
+//        navController = navHostFragment.navController
+//        binding!!.bottomNavigationView.setupWithNavController(navController!!)
+//
+//        navController?.addOnDestinationChangedListener { _, destination, _ ->
+//            when(destination.id) {
+//                R.id.home_tab -> {
+//                    if (!binding!!.layoutNavBar.isVisible)
+//                    AnimationUtil.animateNavBar(binding!!.layoutNavBar, true)
+//                }
+//                R.id.detailsFragment -> {
+//                    AnimationUtil.animateNavBar(binding!!.layoutNavBar, false)
+//                }
+//                R.id.bookmark_tab -> {
+//                    if (!binding!!.layoutNavBar.isVisible)
+//                    AnimationUtil.animateNavBar(binding!!.layoutNavBar, true)
+//                }
+//            }
+//        }
+
+        binding!!.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.home_tab -> pushFragment(HomeFragment(), "home")
+                R.id.home_tab ->  pushFragment(HomeFragment(), "home")
                 R.id.bookmark_tab -> pushFragment(BookmarksFragment(), "bookmark")
                 else -> {}
             }
@@ -89,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideSystemUI() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, binding.root).let { controller ->
+        WindowInsetsControllerCompat(window, binding!!.root).let { controller ->
             controller.hide(WindowInsetsCompat.Type.systemBars())
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -102,10 +138,10 @@ class MainActivity : AppCompatActivity() {
 
     fun pushFragment(fragment: BaseFragment, backstack: String?) {
         if (fragment is DetailsFragment) {
-            AnimationUtil.animateNavBar(binding.layoutNavBar, false)
+            AnimationUtil.animateNavBar(binding!!.layoutNavBar, false)
         } else {
-            if (!binding.layoutNavBar.isVisible)
-                AnimationUtil.animateNavBar(binding.layoutNavBar, true)
+            if (!binding!!.layoutNavBar.isVisible)
+                AnimationUtil.animateNavBar(binding!!.layoutNavBar, true)
         }
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -121,7 +157,7 @@ class MainActivity : AppCompatActivity() {
         if (supportFragmentManager.fragments.last() is BookmarksFragment) return
 
         if (supportFragmentManager.fragments.last() is DetailsFragment) {
-            AnimationUtil.animateNavBar(binding.layoutNavBar, true)
+            AnimationUtil.animateNavBar(binding!!.layoutNavBar, true)
         }
 
         if (supportFragmentManager.fragments.last() is HomeFragment) {

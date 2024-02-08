@@ -17,4 +17,7 @@
     <string name="no_image_found">Image not found</string>
 
     <string name="network_error">No network available</string>
+    <string name="title_home" translatable="false">title_home</string>
+    <string name="title_details" translatable="false">title_details</string>
+    <string name="title_bookmarks" translatable="false">title_bookmarks</string>
 </resources>
