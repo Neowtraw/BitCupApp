@@ -29,7 +29,7 @@ object AnimationUtil {
             override fun onAnimationRepeat(animation: Animation?) {}
 
             override fun onAnimationEnd(animation: Animation?) {
-                if(!show) view.visibility = View.INVISIBLE
+                if(!show) view.visibility = View.GONE
                 onAnimationEnd()
             }
         })

@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
@@ -50,7 +51,6 @@ class HomeFragment : BaseFragment() {
     override fun createView(inf: LayoutInflater, con: ViewGroup?, state: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inf, con, false)
 
-        //ui
         customizeUI()
         createTabLayout()
         createPhotoContainerView()
@@ -84,8 +84,6 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun createTabLayout() {
-
-
         binding!!.Collections.apply {
             id = View.generateViewId()
             setBackgroundResource(R.color.background)
@@ -98,7 +96,6 @@ class HomeFragment : BaseFragment() {
                     outline.setRect(0, 5.dp, view.width, view.height)
                 }
             }
-
         }
     }
 
@@ -111,10 +108,10 @@ class HomeFragment : BaseFragment() {
             )
             photoAdapter = CuratedPhotoAdapter {
                 model.setPhotoId(it.id, true)
-                pushFragment(DetailsFragment(), "details")
+                findNavController().navigate(R.id.action_home_fragment_to_details_fragment)
             }
             adapter = photoAdapter
-            addItemDecoration(ItemDecoration.createItemDecoration(8))
+            addItemDecoration(ItemDecoration.createItemDecoration(5))
         }
     }
 

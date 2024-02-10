@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 interface LocalDataSource {
 
     suspend fun updateBookmarkPhoto(photo: Photo)
-    fun getBookmarkPhoto(id: Long): Flow<Photo?>
+    suspend fun getBookmarkPhoto(id: Long): Photo?
     fun getBookmarkPhotos(): Flow<List<Photo>>
 }

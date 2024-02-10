@@ -17,7 +17,7 @@ interface AppDao {
     suspend fun deleteBookmarkPhoto(id: Long)
 
     @Query("SELECT * FROM CuratedPhoto WHERE id = :id")
-    fun getBookmarkPhoto(id: Long): Flow<CuratedPhotoEntity?>
+    suspend fun getBookmarkPhoto(id: Long): CuratedPhotoEntity?
 
     @Query("SELECT * FROM CuratedPhoto")
     fun getBookmarkPhotos(): Flow<List<CuratedPhotoEntity>>

@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.databinding.FragmentBookmarksBinding
@@ -43,12 +42,6 @@ class BookmarksFragment : BaseFragment() {
         return binding!!.root
     }
 
-    override fun destroyView() {
-        super.destroyView()
-        binding = null
-        bookmarksAdapter = null
-    }
-
     private fun customizeUI() {
 
         binding!!.tvBookmarks.typeface = Font.REGULAR
@@ -67,32 +60,32 @@ class BookmarksFragment : BaseFragment() {
             setHasFixedSize(true)
             bookmarksAdapter = BookmarkPhotoAdapter {
                 model.setPhotoId(it.id, false)
-                pushFragment(DetailsFragment(), "details")
+                findNavController().navigate(R.id.action_bookmarks_fragment_to_details_fragment)
             }
             layoutManager = StaggeredGridLayoutManager(
                 2,
                 StaggeredGridLayoutManager.VERTICAL
             )
             adapter = bookmarksAdapter
-            addItemDecoration(ItemDecoration.createItemDecoration(8))
+            addItemDecoration(ItemDecoration.createItemDecoration(5))
         }
     }
 
     private fun setupListeners() {
         binding!!.llNotFound.tvExplore.setOnClickListener {
-            pushFragment(HomeFragment(), "home")
+            findNavController().navigate(R.id.action_bookmarks_fragment_to_details_fragment)
         }
     }
 
 
     override fun observeChanges() {
         lifecycleScope.launch {
-            requireActivity().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                vm.bookmarks.collect {
-                    binding!!.rvBookmarksView.visibility = View.VISIBLE
-                    bookmarksAdapter!!.photos = it
-                    bookmarksAdapter!!.notifyItemChanged(0, it.size)
-                }
+            vm.bookmarks.collect {
+                binding?.rvBookmarksView?.visibility = View.VISIBLE
+                binding?.llNotFound?.llNotFound?.visibility = View.GONE
+                bookmarksAdapter!!.photos = it
+                if(it.isEmpty()) binding?.llNotFound?.llNotFound?.visibility = View.VISIBLE
+                bookmarksAdapter!!.notifyItemChanged(0, it.size)
             }
         }
     }

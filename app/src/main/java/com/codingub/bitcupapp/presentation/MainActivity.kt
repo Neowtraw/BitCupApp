@@ -2,8 +2,6 @@ package com.codingub.bitcupapp.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,18 +11,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.databinding.ActivityMainBinding
-import com.codingub.bitcupapp.presentation.features.bookmarks.ui.BookmarksFragment
-import com.codingub.bitcupapp.presentation.features.details.ui.DetailsFragment
 import com.codingub.bitcupapp.presentation.features.home.ui.HomeFragment
-import com.codingub.bitcupapp.ui.base.BaseFragment
 import com.codingub.bitcupapp.utils.AnimationUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,16 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val vm: MainActivityViewModel by viewModels()
-    private  var binding: ActivityMainBinding? = null
-    private var navController: NavController? = null
+    private var binding: ActivityMainBinding? = null
+    private lateinit var navController: NavController
 
-    //used for navigation
-    private val TIME_INTERVAL: Long = 2000L
-    private var mBackPressedTime: Long = 0
-
-    /**
-     * Used for activity context
-     */
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var Instance: MainActivity? = null
@@ -55,33 +40,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
         super.onCreate(savedInstanceState)
 
         Instance = this
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding?.root
         setContentView(view)
-
         hideSystemUI()
-
         createBottomBar()
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .add(R.id.fragment_container_view, HomeFragment())
-                .commit()
-        }
-
-        onBackPressedDispatcher.addCallback(this) {
-            back()
-        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        navController = null
+        //   navController = null
         binding = null
     }
 
@@ -90,37 +61,33 @@ class MainActivity : AppCompatActivity() {
      */
 
     private fun createBottomBar() {
-//        val navHostFragment = supportFragmentManager.findFragmentById(
-//            R.id.fragment_container_view
-//        ) as NavHostFragment
-//        navController = navHostFragment.navController
-//        binding!!.bottomNavigationView.setupWithNavController(navController!!)
-//
-//        navController?.addOnDestinationChangedListener { _, destination, _ ->
-//            when(destination.id) {
-//                R.id.home_tab -> {
-//                    if (!binding!!.layoutNavBar.isVisible)
-//                    AnimationUtil.animateNavBar(binding!!.layoutNavBar, true)
-//                }
-//                R.id.detailsFragment -> {
-//                    AnimationUtil.animateNavBar(binding!!.layoutNavBar, false)
-//                }
-//                R.id.bookmark_tab -> {
-//                    if (!binding!!.layoutNavBar.isVisible)
-//                    AnimationUtil.animateNavBar(binding!!.layoutNavBar, true)
-//                }
-//            }
-//        }
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        navController = navHostFragment.navController
+        binding!!.bottomNav.setupWithNavController(navController)
 
-        binding!!.bottomNavigationView.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.home_tab ->  pushFragment(HomeFragment(), "home")
-                R.id.bookmark_tab -> pushFragment(BookmarksFragment(), "bookmark")
-                else -> {}
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.home_tab, R.id.home_fragment -> {
+                    if (!binding!!.bottomNav.isVisible) {
+                        AnimationUtil.animateNavBar(binding!!.bottomShadow, true)
+                        AnimationUtil.animateNavBar(binding!!.bottomNav, true)
+                    }
+                }
+
+                R.id.details_fragment -> {
+                    AnimationUtil.animateNavBar(binding!!.bottomShadow, false)
+                    AnimationUtil.animateNavBar(binding!!.bottomNav, false)
+                }
+
+                R.id.bookmarks_tab, R.id.bookmarks_fragment -> {
+                    if (!binding!!.bottomNav.isVisible) {
+                        AnimationUtil.animateNavBar(binding!!.bottomShadow, true)
+                        AnimationUtil.animateNavBar(binding!!.bottomNav, true)
+                    }
+                }
             }
-            true
         }
-
     }
 
     private fun hideSystemUI() {
@@ -130,59 +97,5 @@ class MainActivity : AppCompatActivity() {
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
-    }
-
-    /*
-        Navigation
-     */
-
-    fun pushFragment(fragment: BaseFragment, backstack: String?) {
-        if (fragment is DetailsFragment) {
-            AnimationUtil.animateNavBar(binding!!.layoutNavBar, false)
-        } else {
-            if (!binding!!.layoutNavBar.isVisible)
-                AnimationUtil.animateNavBar(binding!!.layoutNavBar, true)
-        }
-
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-        fragmentTransaction.replace(R.id.fragment_container_view, fragment)
-        fragmentTransaction.addToBackStack(backstack)
-
-
-        fragmentTransaction.commit()
-    }
-
-    fun back() {
-        if (supportFragmentManager.fragments.last() is BookmarksFragment) return
-
-        if (supportFragmentManager.fragments.last() is DetailsFragment) {
-            AnimationUtil.animateNavBar(binding!!.layoutNavBar, true)
-        }
-
-        if (supportFragmentManager.fragments.last() is HomeFragment) {
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - mBackPressedTime > TIME_INTERVAL) {
-                Toast.makeText(this@MainActivity, R.string.exit_app_string, Toast.LENGTH_SHORT)
-                    .show()
-                mBackPressedTime = currentTime
-            } else {
-                finish()
-            }
-            return
-        }
-
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.fade_out, R.anim.fade_in)
-        val currentFragment =
-            supportFragmentManager.findFragmentById(R.id.fragment_container_view)
-        currentFragment?.view?.startAnimation(
-            AnimationUtils.loadAnimation(
-                this@MainActivity,
-                R.anim.fade_out
-            )
-        )
-        supportFragmentManager.popBackStack()
-        transaction.commit()
     }
 }

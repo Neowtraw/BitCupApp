@@ -16,8 +16,8 @@ class LocalDataSourceImpl @Inject constructor(
     private val dao: AppDao
 ) : LocalDataSource {
 
-    override fun getBookmarkPhoto(id: Long): Flow<Photo?> =
-        dao.getBookmarkPhoto(id = id).map { it?.toPhoto() }
+    override suspend fun getBookmarkPhoto(id: Long): Photo? =
+        dao.getBookmarkPhoto(id = id)?.toPhoto()
 
     override fun getBookmarkPhotos(): Flow<List<Photo>> =
         dao.getBookmarkPhotos().map {
@@ -27,7 +27,7 @@ class LocalDataSourceImpl @Inject constructor(
 
     override suspend fun updateBookmarkPhoto(photo: Photo) {
         database.withTransaction {
-            getBookmarkPhoto(photo.id).firstOrNull()?.let {
+            getBookmarkPhoto(photo.id)?.let {
                 dao.deleteBookmarkPhoto(photo.id)
                 return@withTransaction
             }

@@ -43,10 +43,10 @@ abstract class BaseFragment : Fragment() {
     protected open fun observeChanges() {}
 
     protected fun pushFragment(fragment: BaseFragment, backstack: String?) {
-        mainActivity.pushFragment(fragment, backstack)
+       // mainActivity.pushFragment(fragment, backstack)
     }
 
     protected fun backFragment() {
-        mainActivity.back()
+     //   mainActivity.back()
     }
 }

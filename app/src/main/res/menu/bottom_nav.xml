@@ -5,6 +5,6 @@
         android:id="@+id/home_tab"
         android:icon="@drawable/selector_menu_home_item"/>
     <item android:title=""
-        android:id="@+id/bookmark_tab"
+        android:id="@+id/bookmarks_tab"
         android:icon="@drawable/selector_bookmark_home_item"/>
 </menu>

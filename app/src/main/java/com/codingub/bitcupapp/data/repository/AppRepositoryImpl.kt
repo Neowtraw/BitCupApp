@@ -28,7 +28,7 @@ class AppRepositoryImpl @Inject constructor(
             val collections = remoteDataSource.getFeaturedCollections()
 
             ResultState.Success(collections)
-        } catch (e: Exception) { // temporary
+        } catch (e: Exception) {
             if (e is CancellationException) throw e
             if(!connectionManager.isConnected) return ResultState.Error(NetworkUnavailableException())
 
@@ -41,7 +41,7 @@ class AppRepositoryImpl @Inject constructor(
         return try {
             val photos = remoteDataSource.getCuratedPhotos()
             ResultState.Success(photos)
-        } catch (e: Exception) { // temporary
+        } catch (e: Exception) {
             if (e is CancellationException) throw e
             if(!connectionManager.isConnected) return ResultState.Error(NetworkUnavailableException())
 
@@ -54,7 +54,7 @@ class AppRepositoryImpl @Inject constructor(
     override suspend fun searchPhotos(query: String): ResultState<List<Photo>> {
         return try {
             ResultState.Success(remoteDataSource.searchPhotos(query))
-        } catch (e: Exception) { // temporary
+        } catch (e: Exception) {
             if (e is CancellationException) throw e
             if(!connectionManager.isConnected) return ResultState.Error(NetworkUnavailableException())
 
@@ -67,7 +67,7 @@ class AppRepositoryImpl @Inject constructor(
     override suspend fun getPhoto(id: Long, isRemote: Boolean): ResultState<Photo> {
         return try {
             if(isRemote) ResultState.Success(remoteDataSource.getPhoto(id))
-            else ResultState.Success(localDataSource.getBookmarkPhoto(id).firstOrNull()!!)
+            else ResultState.Success(localDataSource.getBookmarkPhoto(id)!!)
         } catch (e: Exception) {
             if (e is CancellationException) throw e
             if(!connectionManager.isConnected) return ResultState.Error(NetworkUnavailableException())
@@ -82,7 +82,7 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isBookmarkPhoto(id: Long): Boolean {
-        return localDataSource.getBookmarkPhoto(id).firstOrNull() != null
+        return localDataSource.getBookmarkPhoto(id) != null
     }
 
     override fun getBookmarkPhotos(): Flow<List<Photo>> {

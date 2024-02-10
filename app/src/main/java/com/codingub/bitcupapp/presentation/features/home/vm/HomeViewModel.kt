@@ -74,5 +74,4 @@ class HomeViewModel @Inject constructor(
         super.onCleared()
         searchJob = null
     }
-
 }

@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.codingub.bitcupapp.R
 import com.codingub.bitcupapp.common.ResultState
 import com.codingub.bitcupapp.databinding.FragmentDetailsBinding
@@ -71,7 +72,7 @@ class DetailsFragment : BaseFragment() {
 
     override fun destroyView() {
         super.destroyView()
-        binding = null
+      //  binding = null
     }
 
     private fun createUI() {
@@ -136,7 +137,7 @@ class DetailsFragment : BaseFragment() {
         }
 
         binding!!.back.setOnClickListener {
-            backFragment()
+            findNavController().popBackStack()
         }
         binding!!.bookmark.setOnClickListener {
             it.startAnimation(AnimationUtil.clickAnimation())
@@ -153,7 +154,7 @@ class DetailsFragment : BaseFragment() {
             }
         }
         binding!!.llNotFound.tvExplore.setOnClickListener {
-            pushFragment(HomeFragment(), "home")
+            findNavController().navigate(R.id.action_details_fragment_to_home_fragment)
         }
     }
 

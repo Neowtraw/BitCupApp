@@ -61,7 +61,6 @@
         android:background="@color/background_add"
         android:backgroundTint="@color/background_add"
         android:indeterminate="true"
-        android:visibility="gone"
         app:indicatorColor="@color/contrast" />
 
 
@@ -80,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
         android:layout_marginTop="12dp"
+        android:layout_marginBottom="60dp"
         android:layout_marginEnd="18dp"
         android:visibility="gone" />
 
